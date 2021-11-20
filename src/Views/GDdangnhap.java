@@ -8,18 +8,29 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.awt.event.ActionEvent;
 
 public class GDdangnhap extends JFrame {
 
+	protected static final Component GDadmin = null;
 	private JPanel contentPane;
 	private JLabel lblNewLabel;
-	private JTextField textField;
-	private JPasswordField passwordField;
+	private JTextField txtUid;
+	private JPasswordField txtPwd;
 
 	/**
 	 * Launch the application.
@@ -70,18 +81,41 @@ public class GDdangnhap extends JFrame {
 		lbPassword.setBounds(51, 199, 100, 44);
 		contentPane.add(lbPassword);
 		
-		textField = new JTextField();
-		lbUsername.setLabelFor(textField);
-		textField.setBounds(161, 133, 263, 30);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		txtUid = new JTextField();
+		lbUsername.setLabelFor(txtUid);
+		txtUid.setBounds(161, 133, 263, 30);
+		contentPane.add(txtUid);
+		txtUid.setColumns(10);
 		
-		passwordField = new JPasswordField();
-		lbPassword.setLabelFor(passwordField);
-		passwordField.setBounds(161, 209, 263, 30);
-		contentPane.add(passwordField);
+		txtPwd = new JPasswordField();
+		lbPassword.setLabelFor(txtPwd);
+		txtPwd.setBounds(161, 209, 263, 30);
+		contentPane.add(txtPwd);
 		
 		JButton btnDangnhap = new JButton("X\u00E1c Nh\u1EADn");
+		btnDangnhap.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				connect cn = new connect();
+				Connection connection = null;
+				try {
+					connection=cn.getConnection();
+					String sql = "Select * from Employees Where USERNAME =? and PASSWORD=?";
+					PreparedStatement pst =connection.prepareCall(sql);
+					pst.setString(1, txtUid.getText());
+					pst.setString(2, txtPwd.getText());
+					ResultSet rs = pst.executeQuery();
+					if(rs.next())
+					{
+						GDadmin aDadmin = new GDadmin();
+						aDadmin.show();
+					}else {
+						JOptionPane.showMessageDialog(null,"Sai tài khoản mật khẩu");;
+					}
+				} catch (SQLException ex) {
+					JOptionPane.showMessageDialog(null,ex);
+				}
+			}
+		});
 		btnDangnhap.setBounds(241, 282, 100, 35);
 		contentPane.add(btnDangnhap);
 		JFrame jf = new JFrame();
