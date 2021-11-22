@@ -82,6 +82,10 @@ public class GDdangnhap extends JFrame {
 		contentPane.add(lbPassword);
 		
 		txtUid = new JTextField();
+		txtUid.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		lbUsername.setLabelFor(txtUid);
 		txtUid.setBounds(161, 133, 263, 30);
 		contentPane.add(txtUid);
@@ -107,7 +111,8 @@ public class GDdangnhap extends JFrame {
 					if(rs.next())
 					{
 						GDadmin aDadmin = new GDadmin();
-						aDadmin.show();
+						aDadmin.setVisible(true);
+						 dispose();
 					}else {
 						JOptionPane.showMessageDialog(null,"Sai tài khoản mật khẩu");;
 					}
@@ -122,4 +127,6 @@ public class GDdangnhap extends JFrame {
 	
 		jf.setLocationRelativeTo(null);
 	}
+
+	
 }
