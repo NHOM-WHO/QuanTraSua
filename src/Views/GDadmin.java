@@ -21,6 +21,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class GDadmin extends JFrame {
+	private Monan mn;
+	private Danhmuc dm;
 	private Quanlytaikhoan qltk;
 	private JPanel contentPane;
 
@@ -105,6 +107,20 @@ public class GDadmin extends JFrame {
 		PanelLeft.add(Btntaikhoan);
 		
 		JButton Btnhanghoa = new JButton("Quản lý hàng hóa");
+		Btnhanghoa.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(dm==null && mn == null) {
+					dm = new Danhmuc();
+					mn = new Monan();
+					tabMain.addTab("Danh muc",dm);
+					tabMain.addTab("Mon an", mn);
+					
+					}
+					tabMain.setSelectedComponent(dm);
+					tabMain.setSelectedComponent(mn);
+					
+			}
+		});
 		Btnhanghoa.setBackground(Color.LIGHT_GRAY);
 		Btnhanghoa.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		Btnhanghoa.setBounds(0, 116, 220, 50);
@@ -115,6 +131,7 @@ public class GDadmin extends JFrame {
 		Btndathang.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		Btndathang.setBounds(0, 168, 220, 50);
 		PanelLeft.add(Btndathang);
+		
 		
 		JButton Btnthongkee = new JButton("Thống kê");
 		Btnthongkee.setBackground(Color.LIGHT_GRAY);

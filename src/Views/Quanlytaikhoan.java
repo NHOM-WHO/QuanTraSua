@@ -13,7 +13,6 @@ import java.awt.Font;
 import javax.swing.JButton;
 
 public class Quanlytaikhoan extends JPanel {
-	private JTable table;
 	private JTextField Txtsearch;
 
 	/**
@@ -22,14 +21,6 @@ public class Quanlytaikhoan extends JPanel {
 	public Quanlytaikhoan() {
 		setBackground(new Color(32, 178, 170));
 		setLayout(null);
-		
-		JScrollPane ScrollPane = new JScrollPane();
-		ScrollPane.setBounds(0, 57, 554, 458);
-		ScrollPane.setPreferredSize(new Dimension(500, 500));
-		add(ScrollPane);
-		
-		table = new JTable();
-		ScrollPane.setViewportView(table);
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(32, 178, 170));
