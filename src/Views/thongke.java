@@ -44,7 +44,7 @@ public class thongke extends JPanel {
 		panel_1.add(Btnload);
 		
 		table_2 = new JTable();
-		table_2.setBounds(10, 69, 539, 411);
+		table_2.setBounds(10, 57, 545, 460);
 		add(table_2);
 	}
 }

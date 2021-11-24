@@ -9,7 +9,7 @@ public class connect {
 		Connection connection =null;
 		try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			String connectionURL="jdbc:sqlserver://DESKTOP-MQLQGK8\\SQLEXPRESS:1433;databaseName=QuanTS;integratedSecurity=true";
+			String connectionURL="jdbc:sqlserver://DESKTOP-RLD2Q4E\\CAOTHAI:1433;databaseName=QuanTraSua;integratedSecurity=true";
 			connection=DriverManager.getConnection(connectionURL, "sa", "sa");
 			System.out.println("Kết nối cơ sở dữ liệu thành công !!!!!!!!!");
 		} catch (ClassNotFoundException e) {

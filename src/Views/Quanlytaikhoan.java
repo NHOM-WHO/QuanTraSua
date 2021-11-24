@@ -11,9 +11,11 @@ import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import java.awt.Font;
 import javax.swing.JButton;
+import javax.swing.JTabbedPane;
 
 public class Quanlytaikhoan extends JPanel {
 	private JTextField Txtsearch;
+	private JTable table;
 
 	/**
 	 * Create the panel.
@@ -35,11 +37,6 @@ public class Quanlytaikhoan extends JPanel {
 		Txtsearch.setBounds(366, 6, 176, 19);
 		panel.add(Txtsearch);
 		Txtsearch.setColumns(10);
-		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(604, 5, 141, 21);
-		panel.add(comboBox);
-		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(new Color(32, 178, 170));
 		panel_1.setBounds(553, 57, 202, 458);
@@ -61,6 +58,14 @@ public class Quanlytaikhoan extends JPanel {
 		JButton Btnload = new JButton("Load");
 		Btnload.setBounds(69, 258, 85, 21);
 		panel_1.add(Btnload);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setBounds(604, 5, 141, 21);
+		panel.add(comboBox);
+		
+		table = new JTable();
+		table.setBounds(10, 57, 545, 460);
+		add(table);
 
 	}
 }

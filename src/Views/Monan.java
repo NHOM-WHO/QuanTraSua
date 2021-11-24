@@ -6,9 +6,12 @@ import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.JTable;
 
 public class Monan extends JPanel {
+	private JTable table;
 
 	/**
 	 * Create the panel.
@@ -27,7 +30,7 @@ public class Monan extends JPanel {
 			JTextField Txtsearch = new JTextField();
 			Txtsearch.setForeground(new Color(169, 169, 169));
 			Txtsearch.setFont(new Font("Tahoma", Font.PLAIN, 12));
-			Txtsearch.setText("search");
+			Txtsearch.setText("search mon an");
 			Txtsearch.setBounds(366, 6, 176, 19);
 			panel.add(Txtsearch);
 			Txtsearch.setColumns(10);
@@ -57,6 +60,10 @@ public class Monan extends JPanel {
 			JButton Btnload = new JButton("Load");
 			Btnload.setBounds(69, 258, 85, 21);
 			panel_1.add(Btnload);
+			
+			table = new JTable();
+			table.setBounds(10, 57, 545, 460);
+			add(table);
 
 		}
 	}

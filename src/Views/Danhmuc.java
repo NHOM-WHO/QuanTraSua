@@ -8,8 +8,11 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 
 public class Danhmuc extends JPanel {
+	private JTable table;
+	private JTable table_1;
 
 	/**
 	 * Create the panel.
@@ -27,7 +30,7 @@ public class Danhmuc extends JPanel {
 			JTextField Txtsearch = new JTextField();
 			Txtsearch.setForeground(new Color(169, 169, 169));
 			Txtsearch.setFont(new Font("Tahoma", Font.PLAIN, 12));
-			Txtsearch.setText("search");
+			Txtsearch.setText("search danh muc");
 			Txtsearch.setBounds(366, 6, 176, 19);
 			panel.add(Txtsearch);
 			Txtsearch.setColumns(10);
@@ -35,6 +38,10 @@ public class Danhmuc extends JPanel {
 			JComboBox comboBox = new JComboBox();
 			comboBox.setBounds(604, 5, 141, 21);
 			panel.add(comboBox);
+			
+			table = new JTable();
+			table.setBounds(10, 83, 530, 431);
+			panel.add(table);
 			
 			JPanel panel_1 = new JPanel();
 			panel_1.setBackground(new Color(32, 178, 170));
@@ -60,9 +67,9 @@ public class Danhmuc extends JPanel {
 
 		}
  
- JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
- tabbedPane.setBounds(0, 57, 552, 458);
- add(tabbedPane);
+ table_1 = new JTable();
+ table_1.setBounds(10, 69, 545, 460);
+ add(table_1);
 	}
 
 	}

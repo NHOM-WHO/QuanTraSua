@@ -25,7 +25,7 @@ public class GDadmin extends JFrame {
 	private Danhmuc dm;
 	private Quanlytaikhoan qltk;
 	private JPanel contentPane;
-
+	private thongke tkThongke;
 	/**
 	 * Launch the application.
 	 */
@@ -95,8 +95,8 @@ public class GDadmin extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(qltk==null) {
 				qltk = new Quanlytaikhoan();
-				tabMain.addTab("Quản Lý Tài Khoản",qltk);
-				
+				 
+				tabMain.addTab("Quản lý tài khoản",qltk);			
 				}
 				tabMain.setSelectedComponent(qltk);
 			}
@@ -112,8 +112,8 @@ public class GDadmin extends JFrame {
 				if(dm==null && mn == null) {
 					dm = new Danhmuc();
 					mn = new Monan();
-					tabMain.addTab("Danh muc",dm);
-					tabMain.addTab("Mon an", mn);
+					tabMain.addTab("Danh mục",dm);
+					tabMain.addTab("Món ăn", mn);
 					
 					}
 					tabMain.setSelectedComponent(dm);
@@ -134,6 +134,16 @@ public class GDadmin extends JFrame {
 		
 		
 		JButton Btnthongkee = new JButton("Thống kê");
+		Btnthongkee.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(tkThongke==null) {
+					tkThongke = new thongke();
+					 
+					tabMain.addTab("Thống kê",tkThongke);			
+					}
+					tabMain.setSelectedComponent(tkThongke);
+			}
+		});
 		Btnthongkee.setBackground(Color.LIGHT_GRAY);
 		Btnthongkee.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		Btnthongkee.setBounds(0, 220, 220, 50);
