@@ -2,7 +2,11 @@ package Views;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+
+import javax.swing.table.DefaultTableModel;
 	
 public class connect {
 	public static Connection getConnection() throws SQLException {
@@ -18,6 +22,7 @@ public class connect {
 		}
 		return connection;
 	}
+
 	public static void main(String[] args) throws SQLException {
 			getConnection();
 

@@ -61,7 +61,7 @@ public class GDdangnhap extends JFrame {
 		contentPane.setBorder(new LineBorder(new Color(0, 0, 205), 2));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+		setLocationRelativeTo(null);
 		lblNewLabel = new JLabel("\u0110\u0102NG NH\u1EACP");
 		lblNewLabel.setForeground(new Color(255, 255, 255));
 		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 20));

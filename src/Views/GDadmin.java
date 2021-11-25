@@ -47,14 +47,13 @@ public class GDadmin extends JFrame {
 	 */
 	public GDadmin() {
 		setTitle("Giao Diện Admin");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1000,650);
 		contentPane = new JPanel();
 		contentPane.setName("");
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+		setLocationRelativeTo(null);
 		JTabbedPane tabMain = new JTabbedPane(JTabbedPane.TOP);
 		tabMain.setBounds(237, 5, 749, 611);
 		contentPane.add(tabMain);
