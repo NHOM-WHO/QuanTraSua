@@ -1,18 +1,18 @@
 package Models;
 
 public class Employees {
-	private int ID;
-	private String username;
-	private String password;
-	private String name;
-	private String phone;
+	protected int ID;
+	protected String username;
+	protected String password;
+	protected String name;
+	protected String phone;
 	@Override
 	public String toString() {
 		return "Employees [ID=" + ID + ", username=" + username + ", password=" + password + ", name=" + name
 				+ ", phone=" + phone + ", permission=" + permission + ", salary=" + salary + "]";
 	}
-	private String permission;
-	private String salary;
+	protected String permission;
+	protected String salary;
 	
 	 public Employees(int ID,String username, String password,String name,String phone,String permission,String salary) {
 	        super();
@@ -70,4 +70,8 @@ public class Employees {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
+	public Object[] toArray() {
+		return new Object[] {ID,username,password,name,phone,permission,salary};
+	}
+	
 }

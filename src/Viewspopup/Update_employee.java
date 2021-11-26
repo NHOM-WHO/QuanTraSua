@@ -2,41 +2,24 @@ package Viewspopup;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
 import java.awt.Font;
-import javax.swing.JTextPane;
-import javax.swing.JSpinner;
-import javax.swing.JButton;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.JavaBean;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.util.Vector;
-import java.awt.event.ActionEvent;
 
-import Views.GDadmin;
-import Views.Quanlytaikhoan;
-import Views.connect;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextPane;
+import javax.swing.border.EmptyBorder;
 
-public class Manager_crud_employee extends JFrame {
+public class Update_employee extends JFrame {
 
 	private JPanel contentPane;
-	Connection connection =null;
-	String connectionURL="jdbc:sqlserver://DESKTOP-RLD2Q4E\\CAOTHAI:1433;databaseName=QuanTraSua;integratedSecurity=true";
-	PreparedStatement pst=null;
-	ResultSet rs=null;
-	int q,i,id,deleteItem;
 
 	/**
 	 * Launch the application.
@@ -45,8 +28,7 @@ public class Manager_crud_employee extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Manager_crud_employee frame = new Manager_crud_employee();
-					
+					Update_employee frame = new Update_employee();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -58,8 +40,7 @@ public class Manager_crud_employee extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public  Manager_crud_employee() {
-		
+	public Update_employee() {
 		setBounds(100, 100, 481, 473);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -71,7 +52,7 @@ public class Manager_crud_employee extends JFrame {
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Thêm nhân viên");
+		JLabel lblNewLabel = new JLabel("Sửa nhân viên");
 		lblNewLabel.setFont(new Font("Segoe UI Black", Font.BOLD, 14));
 		lblNewLabel.setBounds(159, 10, 153, 33);
 		panel.add(lblNewLabel);
@@ -144,15 +125,15 @@ public class Manager_crud_employee extends JFrame {
 		txtID.setBounds(97, 24, 185, 19);
 		panel_1.add(txtID);
 		
-		JButton btnNewButton = new JButton("Thêm");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton Btnupdate = new JButton("Update");
+		Btnupdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Connection connection=null;
 				try {
 				
 					String connectionURL="jdbc:sqlserver://DESKTOP-RLD2Q4E\\CAOTHAI:1433;databaseName=QuanTraSua;integratedSecurity=true";
 					connection=DriverManager.getConnection(connectionURL, "sa", "sa");
-					String query="INSERT INTO Employees VALUES(?,?,?,?,?,?,?)";
+					String query="UPDATE  Employees SET USERNAME=?,PASSWORD=?,NAME=?,PHONENUMBER=?,PERMISSION=?,SALARY=? WHERE ID=?";
 					PreparedStatement ps=connection.prepareStatement(query);
 					ps.setString(1, txtID.getText());
 					ps.setString(2, txtUsername.getText());
@@ -161,20 +142,15 @@ public class Manager_crud_employee extends JFrame {
 					ps.setString(5, txtPhone.getText());
 					ps.setString(6, txtPermission.getText());
 					ps.setString(7, txtSalary.getText());
-					ps.execute();
+					ps.executeUpdate();
 					JOptionPane.showMessageDialog(null, "saved");
 					dispose();
 				} catch (Exception e2) {
 					System.out.printf(null,e);
 				}
-				
 			}
 		});
-		btnNewButton.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		btnNewButton.setBounds(203, 405, 85, 21);
-		contentPane.add(btnNewButton);
-		
+		Btnupdate.setBounds(177, 405, 85, 21);
+		contentPane.add(Btnupdate);
 	}
-
-	
 }

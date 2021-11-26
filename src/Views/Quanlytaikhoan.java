@@ -17,14 +17,17 @@ import javax.swing.table.DefaultTableModel;
 
 import Models.Employees;
 import Viewspopup.Manager_crud_employee;
+import Viewspopup.Update_employee;
 
 import java.awt.Font;
 
+import javax.management.modelmbean.ModelMBean;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JTabbedPane;
 import java.awt.event.ActionListener;
 import java.lang.System.Logger;
+import java.security.PublicKey;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -37,98 +40,44 @@ import java.util.Vector;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.ContainerAdapter;
+import java.awt.event.ContainerEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import javax.swing.table.DefaultTableModel;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class Quanlytaikhoan extends JPanel {
 	private JTextField Txtsearch;
-	private JTable table;
 	private Manager_crud_employee crudEmployee;
 	private Employees employees;
-	
-//	Connection connection =null;
-//	String connectionURL="jdbc:sqlserver://DESKTOP-RLD2Q4E\\CAOTHAI:1433;databaseName=QuanTraSua;integratedSecurity=true";
-//	PreparedStatement pst=null;
-//	ResultSet rs=null;
-//	int q,i,id,deleteItem;
-//	
-//	public void updateDB() {
-//		try {
-//			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-//			connection=DriverManager.getConnection(connectionURL, "sa", "sa");
-//			pst =connection.prepareStatement("SELECT * FROM Employees");
-//			rs =pst.executeQuery();
-//			ResultSetMetaData stData= rs.getMetaData();
-//			q = stData.getColumnCount();
-//			DefaultTableModel RecordTable = (DefaultTableModel) table.getModel();
-//			RecordTable.setRowCount(0);
-//			while(rs.next()) {
-//				Vector columnData =new Vector();
-//				for(int i = 1;i<=q;i++) {
-//					columnData.add(rs.getShort("id"));
-//					columnData.add(rs.getShort("ID"));
-//					columnData.add(rs.getShort("USERNAME"));
-//					columnData.add(rs.getShort("PASSWORD"));
-//					columnData.add(rs.getShort("NAME"));
-//					columnData.add(rs.getShort("PHONENUMBER"));
-//					columnData.add(rs.getShort("PERMISSION"));
-//					columnData.add(rs.getShort("SALARY"));
-//				}
-//				RecordTable.addRow(columnData);
-//			}
-//		} catch (Exception e) {
-//			JOptionPane.showMessageDialog(null, e);
-//		}
-//		
-//	}
-//	
-//	public ArrayList<Employees> EmployeeList(){
-//		ArrayList<Employees> EmployeeList = new ArrayList<>();
-//		Connection connection =null;
-//		try {
-//			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-//			String connectionURL="jdbc:sqlserver://DESKTOP-RLD2Q4E\\CAOTHAI:1433;databaseName=QuanTraSua;integratedSecurity=true";
-//			connection=DriverManager.getConnection(connectionURL, "sa", "sa");
-//			String queryString= "SELECT * FROM Employees";
-//			Statement st=connection.createStatement();
-//			ResultSet rs=st.executeQuery(queryString);
-//			Employees empl;
-//			while(rs.next()) {
-//				empl= new Employees(rs.getInt("ID"),rs.getString("username"), rs.getString("password"),rs.getString("name"),rs.getString("phone"),rs.getString("permission"),rs.getString("salary"));
-//				EmployeeList.add(empl);
-//			}
-//		} catch (Exception e) {
-//			
-//		}
-//		return EmployeeList;
-//		
-//	}
-	
-//	
-//	public void show() {
-//		ArrayList<Employees> list =EmployeeList();
-//		DefaultTableModel model = (DefaultTableModel) table.getModel();
-//		Object[] row = new Object[7];
-//		for(int i=0;i<list.size();i++) {
-//			row[0]=list.get(i).getID();
-//			row[1]=list.get(i).getUsername();
-//			row[2]=list.get(i).getPassword();
-//			row[3]=list.get(i).getName();
-//			row[4]=list.get(i).getPhone();
-//			row[5]=list.get(i).getPermission();
-//			row[6]=list.get(i).getSalary();
-//			model.addRow(row);
-//			
-//		}
-//	}
-//    
-	 
+	private JTable table;
+	private JScrollPane scrollPane;
+	private String header[] = {"ID", "USERNAME", "PASSWORD"};
+	Connection conn = null;
+    PreparedStatement pst = null;
+    ResultSet rs = null;
+    ResultSetMetaData rsmd = null;
+    Statement st = null;
+    Vector vtCol = null;
+    Vector vtData = null;
+
+
 	/**
 	 * Create the panel.
+	 * @throws SQLException 
 	 */
 	public Quanlytaikhoan() {
-		
+	
+	     
 		setBackground(new Color(32, 178, 170));
 		setLayout(null);
-
+		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(32, 178, 170));
 		panel.setBounds(0, 0, 755, 59);
@@ -160,44 +109,100 @@ public class Quanlytaikhoan extends JPanel {
 		panel_1.add(Btnthem);
 
 		JButton Btnsua = new JButton("Sửa");
+		Btnsua.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Update_employee update_employee=new Update_employee();
+				update_employee.setVisible(true);
+			}
+		});
 		Btnsua.setBounds(69, 209, 85, 21);
 		panel_1.add(Btnsua);
 
 		JButton Btnxoa = new JButton("Xóa");
+		Btnxoa.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int ret = JOptionPane.showConfirmDialog(null,"Bạn có chắc chắc muốn xóa!","yes",JOptionPane.YES_NO_OPTION);
+				if(ret != JOptionPane.YES_OPTION) {
+					 return;
+					}
+				try {
+					conn = DriverManager.getConnection("jdbc:sqlserver://DESKTOP-RLD2Q4E\\\\CAOTHAI:1433;databaseName=QuanTraSua;integratedSecurity=true");
+					 pst = conn.prepareStatement("Delete From Employees where id = ?");
+					 ret = pst.executeUpdate();
+					 if (ret != -1) {
+						  JOptionPane.showMessageDialog(null, "This book has been deleted");  
+						 }
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
+			}
+		});
 
 		Btnxoa.setBounds(69, 162, 85, 21);
 		panel_1.add(Btnxoa);
-
-		JButton Btnload = new JButton("Load");
-		Btnload.addActionListener(new ActionListener() {
+		
+		
+		JButton btnNewButton = new JButton("Load");
+		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				Vector vtRow = null;
+				vtCol = new Vector();
+		        vtData = new Vector();
+		        try {
+					conn = connect.getConnection();
+				} catch (SQLException e1) {
+					
+					e1.printStackTrace();
+				}
+		        String sql = "select * from Employees where(1=1) order by ID desc";
+		        try {
+		            st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+		            rs = st.executeQuery(sql);
+		            rsmd = rs.getMetaData();
+		            for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+		                vtCol.add(rsmd.getColumnName(i));
+		            }
+		            rs.afterLast();
+		            while (rs.previous()) {               
+		                vtRow = new Vector();
+		                for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+		                    vtRow.add(rs.getString(i));
+		                }
+		                vtData.add(vtRow);
+		            }
+		            table.setModel(new DefaultTableModel(vtData, vtCol){
+		                public boolean EditCustomer(int col,int row){
+		                    return false;
+		                }
+		            });
+		        } catch (SQLException ex) {
+		           System.err.printf(null,ex);
+		        }finally{
+		            try {
+		                conn.close();
+		                st.close();
+		                rs.close();
+		            } catch (Exception e3) {
+		                System.out.println(e3);
+		            }
+		        }
+		   
+		        
 			}
 		});
-		Btnload.setBounds(69, 258, 85, 21);
-		panel_1.add(Btnload);
+		btnNewButton.setBounds(69, 254, 85, 21);
+		panel_1.add(btnNewButton);
 
-		JComboBox<Employees> comboBox = new JComboBox<Employees>();
+		JComboBox comboBox = new JComboBox();
 		comboBox.setBounds(604, 5, 141, 21);
 		panel.add(comboBox);
-
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 57, 545, 460);
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 58, 541, 457);
 		add(scrollPane);
 		
 		table = new JTable();
-		
-		table.setModel(new DefaultTableModel(
-				
-			new Object[][] {
-				
-				{null, null, null, null, null, null, null},
-			},
-			new String[] {
-				"ID", "USERNAME", "PASSWORD", "NAME", "PHONE", "PERMISSION", "SALARY"
-			}
-		));
 		scrollPane.setViewportView(table);
-		
-	}
+	}   
+	
 }
