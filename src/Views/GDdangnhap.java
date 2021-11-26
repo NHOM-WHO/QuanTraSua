@@ -18,11 +18,15 @@ import java.awt.Font;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.security.PKCS12Attribute;
+import java.security.interfaces.RSAKey;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class GDdangnhap extends JFrame {
 
@@ -82,16 +86,56 @@ public class GDdangnhap extends JFrame {
 		contentPane.add(lbPassword);
 		
 		txtUid = new JTextField();
-		txtUid.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		txtUid.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if(e.getKeyCode() == e.VK_ENTER){
+					txtPwd.requestFocus();
+					}
 			}
 		});
+	
 		lbUsername.setLabelFor(txtUid);
 		txtUid.setBounds(161, 133, 263, 30);
 		contentPane.add(txtUid);
 		txtUid.setColumns(10);
 		
 		txtPwd = new JPasswordField();
+		txtPwd.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if(e.getKeyCode() == e.VK_ENTER){
+					connect cn = new connect();
+					Connection connection = null;
+					try {
+						connection=cn.getConnection();
+						String sql = "Select * from Employees Where USERNAME =? and PASSWORD=?";
+						PreparedStatement pst =connection.prepareCall(sql);
+						pst.setString(1, txtUid.getText());
+						pst.setString(2, txtPwd.getText());
+						ResultSet rs = pst.executeQuery();
+						if(rs.next())
+						{
+							String s1 =rs.getString("PERMISSION");
+							if(s1.equalsIgnoreCase("manager")) {
+								GDadmin dadmin=new GDadmin();
+								dadmin.setVisible(true);
+								dispose();
+							}
+							if (s1.equalsIgnoreCase("employee")) {
+		                       	GDnhanvien gDnhanvien= new GDnhanvien();
+		                       	gDnhanvien.setVisible(true);
+		                       	dispose();
+		                    } 
+						}else {
+							JOptionPane.showMessageDialog(null,"Sai tài khoản mật khẩu");;
+						}
+					} catch (SQLException ex) {
+						JOptionPane.showMessageDialog(null,ex);
+					}
+					}
+			}
+		});
 		lbPassword.setLabelFor(txtPwd);
 		txtPwd.setBounds(161, 209, 263, 30);
 		contentPane.add(txtPwd);
@@ -110,9 +154,17 @@ public class GDdangnhap extends JFrame {
 					ResultSet rs = pst.executeQuery();
 					if(rs.next())
 					{
-						GDadmin aDadmin = new GDadmin();
-						aDadmin.setVisible(true);
-						 dispose();
+						String s1 =rs.getString("PERMISSION");
+						if(s1.equalsIgnoreCase("manager")) {
+							GDadmin dadmin=new GDadmin();
+							dadmin.setVisible(true);
+							dispose();
+						}
+						if (s1.equalsIgnoreCase("employee")) {
+	                       	GDnhanvien gDnhanvien= new GDnhanvien();
+	                       	gDnhanvien.setVisible(true);
+	                       	dispose();
+	                    } 
 					}else {
 						JOptionPane.showMessageDialog(null,"Sai tài khoản mật khẩu");;
 					}

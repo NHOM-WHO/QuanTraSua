@@ -1,6 +1,7 @@
 package Views;
 
 import javax.swing.JPanel;
+
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import java.awt.Dimension;
@@ -11,6 +12,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane.CloseAction;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
@@ -18,6 +20,7 @@ import javax.swing.table.DefaultTableModel;
 import Models.Employees;
 import Viewspopup.Manager_crud_employee;
 import Viewspopup.Update_employee;
+
 
 import java.awt.Font;
 
@@ -58,7 +61,7 @@ public class Quanlytaikhoan extends JPanel {
 	private Employees employees;
 	private JTable table;
 	private JScrollPane scrollPane;
-	private String header[] = {"ID", "USERNAME", "PASSWORD"};
+	                                                                                                                                                                                                                                  
 	Connection conn = null;
     PreparedStatement pst = null;
     ResultSet rs = null;
@@ -128,6 +131,7 @@ public class Quanlytaikhoan extends JPanel {
 				try {
 					conn = DriverManager.getConnection("jdbc:sqlserver://DESKTOP-RLD2Q4E\\\\CAOTHAI:1433;databaseName=QuanTraSua;integratedSecurity=true");
 					 pst = conn.prepareStatement("Delete From Employees where id = ?");
+					
 					 ret = pst.executeUpdate();
 					 if (ret != -1) {
 						  JOptionPane.showMessageDialog(null, "This book has been deleted");  
@@ -165,9 +169,15 @@ public class Quanlytaikhoan extends JPanel {
 		            rs.afterLast();
 		            while (rs.previous()) {               
 		                vtRow = new Vector();
-		                for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-		                    vtRow.add(rs.getString(i));
-		                }
+		                
+		                    vtRow.add(rs.getInt("ID"));
+		                    vtRow.add(rs.getString("USERNAME"));
+		                    vtRow.add(rs.getString("PASSWORD"));
+		                    vtRow.add(rs.getString("NAME"));
+		                    vtRow.add(rs.getString("PHONENUMBER"));
+		                    vtRow.add(rs.getString("PERMISSION"));
+		                    vtRow.add(rs.getString("SALARY"));
+		                
 		                vtData.add(vtRow);
 		            }
 		            table.setModel(new DefaultTableModel(vtData, vtCol){

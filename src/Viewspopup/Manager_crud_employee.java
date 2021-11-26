@@ -28,6 +28,8 @@ import java.awt.event.ActionEvent;
 import Views.GDadmin;
 import Views.Quanlytaikhoan;
 import Views.connect;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Manager_crud_employee extends JFrame {
 
@@ -143,6 +145,7 @@ public class Manager_crud_employee extends JFrame {
 		JTextPane txtID = new JTextPane();
 		txtID.setBounds(97, 24, 185, 19);
 		panel_1.add(txtID);
+		
 		
 		JButton btnNewButton = new JButton("Thêm");
 		btnNewButton.addActionListener(new ActionListener() {
