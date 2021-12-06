@@ -75,7 +75,7 @@ public class Manager_crud_employee extends JFrame {
 		
 		JLabel lblNewLabel = new JLabel("Thêm nhân viên");
 		lblNewLabel.setFont(new Font("Segoe UI Black", Font.BOLD, 14));
-		lblNewLabel.setBounds(159, 10, 153, 33);
+		lblNewLabel.setBounds(112, 10, 153, 33);
 		panel.add(lblNewLabel);
 		
 		JPanel panel_1 = new JPanel();
@@ -85,66 +85,57 @@ public class Manager_crud_employee extends JFrame {
 		
 		JLabel lblNewLabel_1 = new JLabel("Username");
 		lblNewLabel_1.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		lblNewLabel_1.setBounds(10, 66, 69, 13);
+		lblNewLabel_1.setBounds(10, 35, 69, 13);
 		panel_1.add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("Password");
 		lblNewLabel_1_1.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		lblNewLabel_1_1.setBounds(10, 111, 69, 13);
+		lblNewLabel_1_1.setBounds(10, 80, 69, 13);
 		panel_1.add(lblNewLabel_1_1);
 		
 		JLabel lblNewLabel_1_2 = new JLabel("Name");
 		lblNewLabel_1_2.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		lblNewLabel_1_2.setBounds(10, 148, 69, 13);
+		lblNewLabel_1_2.setBounds(10, 125, 69, 13);
 		panel_1.add(lblNewLabel_1_2);
 		
 		JLabel lblNewLabel_1_3 = new JLabel("PhoneNumber");
 		lblNewLabel_1_3.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		lblNewLabel_1_3.setBounds(10, 189, 94, 13);
+		lblNewLabel_1_3.setBounds(10, 170, 94, 13);
 		panel_1.add(lblNewLabel_1_3);
 		
 		JLabel lblNewLabel_1_4 = new JLabel("Permission");
 		lblNewLabel_1_4.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		lblNewLabel_1_4.setBounds(10, 235, 83, 13);
+		lblNewLabel_1_4.setBounds(10, 215, 83, 13);
 		panel_1.add(lblNewLabel_1_4);
 		
 		JLabel lblNewLabel_1_5 = new JLabel("Salary");
 		lblNewLabel_1_5.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		lblNewLabel_1_5.setBounds(10, 280, 83, 13);
+		lblNewLabel_1_5.setBounds(10, 260, 83, 13);
 		panel_1.add(lblNewLabel_1_5);
 		
 		JTextPane txtUsername = new JTextPane();
-		txtUsername.setBounds(97, 60, 185, 19);
+		txtUsername.setBounds(97, 29, 185, 19);
 		panel_1.add(txtUsername);
 		
 		JTextPane txtPassword = new JTextPane();
-		txtPassword.setBounds(97, 105, 185, 19);
+		txtPassword.setBounds(97, 74, 185, 19);
 		panel_1.add(txtPassword);
 		
 		JTextPane txtName = new JTextPane();
-		txtName.setBounds(97, 148, 185, 19);
+		txtName.setBounds(97, 119, 185, 19);
 		panel_1.add(txtName);
 		
 		JTextPane txtPhone = new JTextPane();
-		txtPhone.setBounds(97, 189, 185, 19);
+		txtPhone.setBounds(97, 164, 185, 19);
 		panel_1.add(txtPhone);
 		
 		JTextPane txtPermission = new JTextPane();
-		txtPermission.setBounds(97, 229, 185, 19);
+		txtPermission.setBounds(97, 209, 185, 19);
 		panel_1.add(txtPermission);
 		
 		JTextPane txtSalary = new JTextPane();
-		txtSalary.setBounds(97, 274, 185, 19);
+		txtSalary.setBounds(97, 254, 185, 19);
 		panel_1.add(txtSalary);
-		
-		JLabel lblNewLabel_1_6 = new JLabel("ID");
-		lblNewLabel_1_6.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		lblNewLabel_1_6.setBounds(10, 24, 69, 13);
-		panel_1.add(lblNewLabel_1_6);
-		
-		JTextPane txtID = new JTextPane();
-		txtID.setBounds(97, 24, 185, 19);
-		panel_1.add(txtID);
 		
 		
 		JButton btnNewButton = new JButton("Thêm");
@@ -155,15 +146,15 @@ public class Manager_crud_employee extends JFrame {
 				
 					String connectionURL="jdbc:sqlserver://DESKTOP-RLD2Q4E\\CAOTHAI:1433;databaseName=QuanTraSua;integratedSecurity=true";
 					connection=DriverManager.getConnection(connectionURL, "sa", "sa");
-					String query="INSERT INTO Employees VALUES(?,?,?,?,?,?,?)";
+					String query="INSERT INTO Employees VALUES(?,?,?,?,?,?)";
 					PreparedStatement ps=connection.prepareStatement(query);
-					ps.setString(1, txtID.getText());
-					ps.setString(2, txtUsername.getText());
-					ps.setString(3, txtPassword.getText());
-					ps.setString(4, txtName.getText());
-					ps.setString(5, txtPhone.getText());
-					ps.setString(6, txtPermission.getText());
-					ps.setString(7, txtSalary.getText());
+					
+					ps.setString(1, txtUsername.getText());
+					ps.setString(2, txtPassword.getText());
+					ps.setString(3, txtName.getText());
+					ps.setString(4, txtPhone.getText());
+					ps.setString(5, txtPermission.getText());
+					ps.setString(6, txtSalary.getText());
 					ps.execute();
 					JOptionPane.showMessageDialog(null, "saved");
 					dispose();
