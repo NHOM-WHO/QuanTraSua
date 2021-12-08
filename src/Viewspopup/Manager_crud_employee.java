@@ -35,7 +35,6 @@ public class Manager_crud_employee extends JFrame {
 
 	private JPanel contentPane;
 	Connection connection =null;
-	String connectionURL="jdbc:sqlserver://DESKTOP-RLD2Q4E\\CAOTHAI:1433;databaseName=QuanTraSua;integratedSecurity=true";
 	PreparedStatement pst=null;
 	ResultSet rs=null;
 	int q,i,id,deleteItem;
@@ -144,8 +143,8 @@ public class Manager_crud_employee extends JFrame {
 				Connection connection=null;
 				try {
 				
-					String connectionURL="jdbc:sqlserver://DESKTOP-RLD2Q4E\\CAOTHAI:1433;databaseName=QuanTraSua;integratedSecurity=true";
-					connection=DriverManager.getConnection(connectionURL, "sa", "sa");
+				
+					connection=connect.getConnection();
 					String query="INSERT INTO Employees VALUES(?,?,?,?,?,?)";
 					PreparedStatement ps=connection.prepareStatement(query);
 					

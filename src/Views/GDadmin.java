@@ -11,9 +11,13 @@ import javax.swing.plaf.basic.BasicTabbedPaneUI.TabbedPaneLayout;
 import java.awt.Panel;
 import java.awt.Dimension;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.Color;
 import javax.swing.UIManager;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.SystemColor;
 import javax.swing.JTabbedPane;
@@ -46,6 +50,9 @@ public class GDadmin extends JFrame {
 	 * Create the frame.
 	 */
 	public GDadmin() {
+		
+		
+		
 		setTitle("Giao Diện Admin");
 		setBounds(100, 100, 1000,650);
 		contentPane = new JPanel();
@@ -74,8 +81,8 @@ public class GDadmin extends JFrame {
 		JLabel lblNewLabel = new JLabel("NGUYỄN CAO THÁI");
 		lblNewLabel.setForeground(Color.WHITE);
 		lblNewLabel.setBackground(Color.WHITE);
-		lblNewLabel.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lblNewLabel.setBounds(10, 5, 124, 40);
+		lblNewLabel.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		lblNewLabel.setBounds(10, 5, 115, 40);
 		lblNewLabel.setPreferredSize(new Dimension(150, 30));
 		PanelHeader.add(lblNewLabel);
 		
@@ -86,8 +93,25 @@ public class GDadmin extends JFrame {
 			}
 		});
 		Btnlogout.setFont(new Font("Segoe UI", Font.BOLD, 10));
-		Btnlogout.setBounds(141, 13, 69, 28);
+		Btnlogout.setBounds(128, 0, 92, 28);
 		PanelHeader.add(Btnlogout);
+		
+		JButton btnngXut = new JButton("Đăng xuất");
+		btnngXut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			
+				int ret = JOptionPane.showConfirmDialog(null,"Bạn có chắc chắc muốn đăng xuất!","Đăng xuất",JOptionPane.YES_NO_OPTION);
+				if(ret != JOptionPane.YES_OPTION) {
+					 return ;
+					}
+				GDdangnhap dnDdangnhap= new GDdangnhap();
+				dnDdangnhap.setVisible(true);
+				dispose();
+			}
+		});
+		btnngXut.setFont(new Font("Segoe UI", Font.BOLD, 10));
+		btnngXut.setBounds(128, 27, 92, 28);
+		PanelHeader.add(btnngXut);
 		
 		JButton Btntaikhoan = new JButton("Quản lý tài khoản");
 		Btntaikhoan.addActionListener(new ActionListener() {
@@ -98,6 +122,7 @@ public class GDadmin extends JFrame {
 				tabMain.addTab("Quản lý tài khoản",qltk);			
 				}
 				tabMain.setSelectedComponent(qltk);
+				
 			}
 		});
 		Btntaikhoan.setBackground(Color.LIGHT_GRAY);

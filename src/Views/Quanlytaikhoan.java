@@ -61,9 +61,7 @@ import java.awt.event.ComponentEvent;
 import javax.swing.JLabel;
 
 public class Quanlytaikhoan extends JPanel {
-	private JTextField Txtsearch;
-	private Manager_crud_employee crudEmployee;
-	private Employees employees;
+	
 	private JTable table;
 	private JScrollPane scrollPane;                                                                                                                                                                                                                                  
 	Connection conn = null;
@@ -79,6 +77,59 @@ public class Quanlytaikhoan extends JPanel {
     private JTextField txtPhone;
     private JTextField txtPermission;
     private JTextField txtSalary;
+    
+    void load() {
+		Vector vtRow = null;
+		vtCol = new Vector();
+        vtData = new Vector();
+        
+        
+        try {
+			conn = connect.getConnection();
+		} catch (SQLException e1) {
+			
+			e1.printStackTrace();
+		}
+        String sql = "select * from Employees where(1=1) order by ID desc";
+        try {
+        	
+            st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+            rs = st.executeQuery(sql);
+            rsmd = rs.getMetaData();
+            for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+                vtCol.add(rsmd.getColumnName(i));
+            }
+            rs.afterLast();
+            while (rs.previous()) {  
+            	vtRow = new Vector();
+                
+                    vtRow.add(rs.getString("ID"));
+                    vtRow.add(rs.getString("USERNAME"));
+                    vtRow.add(rs.getString("PASSWORD"));
+                    vtRow.add(rs.getString("NAME"));
+                    vtRow.add(rs.getString("PHONENUMBER"));
+                    vtRow.add(rs.getString("PERMISSION"));
+                    vtRow.add(rs.getString("SALARY"));
+             
+                
+                vtData.add(vtRow);
+            }
+            table.setModel(new DefaultTableModel(vtData, vtCol){
+                
+                    
+            });
+        } catch (SQLException ex) {
+           System.err.printf(null,ex);
+        }finally{
+            try {
+                conn.close();
+                st.close();
+                rs.close();
+            } catch (Exception e3) {
+                System.out.println(e3);
+            }
+        }
+    }
 	/**
 	 * Create the panel.
 	 * @throws SQLException 
@@ -86,6 +137,7 @@ public class Quanlytaikhoan extends JPanel {
 	/**
 	 * 
 	 */
+    
    
     public  Quanlytaikhoan() {
 		setBackground(new Color(32, 178, 170));
@@ -95,14 +147,6 @@ public class Quanlytaikhoan extends JPanel {
 		panel.setBounds(0, 0, 755, 59);
 		add(panel);
 		panel.setLayout(null);
-
-		Txtsearch = new JTextField();
-		Txtsearch.setForeground(new Color(169, 169, 169));
-		Txtsearch.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		Txtsearch.setText("search");
-		Txtsearch.setBounds(366, 6, 176, 19);
-		panel.add(Txtsearch);
-		Txtsearch.setColumns(10);
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(new Color(32, 178, 170));
 		panel_1.setBounds(553, 57, 202, 458);
@@ -124,17 +168,18 @@ public class Quanlytaikhoan extends JPanel {
 		Btnsua.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Connection connection=null;
-				DefaultTableModel d1 = (DefaultTableModel) table.getModel();
-				int select=table.getSelectedRow();
-				String ID=d1.getValueAt(select, 0).toString();
+				
+				
 					int ret = JOptionPane.showConfirmDialog(null,"Bạn có chắc chắc muốn sửa!","yes",JOptionPane.YES_NO_OPTION);
 					if(ret != JOptionPane.YES_OPTION) {
 						 return ;
 						}
 				try {
+					DefaultTableModel d1 = (DefaultTableModel) table.getModel();
+					int select=table.getSelectedRow();
+					String ID=d1.getValueAt(select, 0).toString();
 					
-					String connectionURL="jdbc:sqlserver://DESKTOP-RLD2Q4E\\CAOTHAI:1433;databaseName=QuanTraSua;integratedSecurity=true";
-					connection=DriverManager.getConnection(connectionURL, "sa", "sa");
+					connection=connect.getConnection();
 					String query="UPDATE  Employees SET USERNAME=?,PASSWORD=?,NAME=?,PHONENUMBER=?,PERMISSION=?,SALARY=? WHERE ID=?";
 					 
 					PreparedStatement ps=connection.prepareStatement(query);
@@ -153,13 +198,13 @@ public class Quanlytaikhoan extends JPanel {
 					
 					
 				} catch (Exception e2) {
+					JOptionPane.showMessageDialog(null, "Hãy chọn id!");  
 					
-					System.out.printf(null,e);
 				}
 			
 			}
 		});
-		Btnsua.setBounds(10, 361, 85, 21);
+		Btnsua.setBounds(117, 405, 85, 21);
 		panel_1.add(Btnsua);
 
 	
@@ -182,12 +227,14 @@ public class Quanlytaikhoan extends JPanel {
 					 if (ret != -1) {
 						  JOptionPane.showMessageDialog(null, "Tài khoản đã được xóa!");  
 						 }
+					
 				} catch (Exception e2) {
-					e2.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Hãy chọn id!");  
+					
 				}
 			}
 		});
-		Btnxoa.setBounds(117, 405, 85, 21);
+		Btnxoa.setBounds(10, 405, 85, 21);
 		panel_1.add(Btnxoa);
 		
 		
@@ -248,7 +295,7 @@ public class Quanlytaikhoan extends JPanel {
 		        
 			}
 		});
-		btnNewButton.setBounds(10, 405, 85, 21);
+		btnNewButton.setBounds(10, 361, 85, 21);
 		panel_1.add(btnNewButton);
 		
 		JLabel label1 = new JLabel("Username");
@@ -310,13 +357,22 @@ public class Quanlytaikhoan extends JPanel {
 		txtSalary.setColumns(10);
 		txtSalary.setBounds(87, 236, 96, 19);
 		panel_1.add(txtSalary);
-
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(604, 5, 141, 21);
-		panel.add(comboBox);
 		
 		scrollPane = new JScrollPane();
 		scrollPane.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			
+			
+				
+				
+			}
+		});
+		scrollPane.setBounds(10, 58, 541, 457);
+		add(scrollPane);
+		
+		table = new JTable();
+		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				DefaultTableModel d1 = (DefaultTableModel) table.getModel();
@@ -328,16 +384,10 @@ public class Quanlytaikhoan extends JPanel {
 				txtPhone.setText(d1.getValueAt(select, 4).toString());
 				txtPermission.setText(d1.getValueAt(select, 5).toString());
 				txtSalary.setText(d1.getValueAt(select, 6).toString());
-			
-				
-				
 			}
 		});
-		scrollPane.setBounds(10, 58, 541, 457);
-		add(scrollPane);
-		
-		table = new JTable();
 		scrollPane.setViewportView(table);
 		table.setAutoCreateRowSorter(true);
+		load();
 	}   
 }
