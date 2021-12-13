@@ -42,7 +42,7 @@ public class GDnhanvien extends JFrame {
 	 */
 	public GDnhanvien() {
 		setTitle("Giao Diện nhân viên");
-		setBounds(100, 100, 1000,650);
+		setBounds(100, 100, 1000, 650);
 		contentPane = new JPanel();
 		contentPane.setName("");
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -52,20 +52,20 @@ public class GDnhanvien extends JFrame {
 		JTabbedPane tabMain = new JTabbedPane(JTabbedPane.TOP);
 		tabMain.setBounds(237, 5, 749, 611);
 		contentPane.add(tabMain);
-		
+
 		Panel PanelLeft = new Panel();
 		PanelLeft.setBounds(5, 5, 226, 611);
 		PanelLeft.setPreferredSize(new Dimension(200, 10));
 		contentPane.add(PanelLeft);
 		PanelLeft.setLayout(null);
-		
+
 		Panel PanelHeader = new Panel();
 		PanelHeader.setBackground(Color.PINK);
 		PanelHeader.setBounds(0, 0, 220, 55);
 		PanelHeader.setMinimumSize(new Dimension(500, 50));
 		PanelLeft.add(PanelHeader);
 		PanelHeader.setLayout(null);
-		
+
 		JLabel lblNewLabel = new JLabel("NGUYỄN CAO THÁI");
 		lblNewLabel.setForeground(Color.WHITE);
 		lblNewLabel.setBackground(Color.WHITE);
@@ -73,7 +73,7 @@ public class GDnhanvien extends JFrame {
 		lblNewLabel.setBounds(10, 5, 124, 40);
 		lblNewLabel.setPreferredSize(new Dimension(150, 30));
 		PanelHeader.add(lblNewLabel);
-		
+
 		JButton Btnlogout = new JButton("Thoát");
 		Btnlogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -83,42 +83,33 @@ public class GDnhanvien extends JFrame {
 		Btnlogout.setFont(new Font("Segoe UI", Font.BOLD, 10));
 		Btnlogout.setBounds(141, 13, 69, 28);
 		PanelHeader.add(Btnlogout);
-		
-		
-		
-		
+
 		JButton Btnhanghoa = new JButton("Quản lý hàng hóa");
 		Btnhanghoa.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(dm==null && mn == null) {
+				if (dm == null && mn == null) {
 					dm = new Danhmuc();
 					mn = new Monan();
-					tabMain.addTab("Danh mục",dm);
+					tabMain.addTab("Danh mục", dm);
 					tabMain.addTab("Món ăn", mn);
-					
-					}
-					tabMain.setSelectedComponent(dm);
-					tabMain.setSelectedComponent(mn);
-					
+
+				}
+				tabMain.setSelectedComponent(dm);
+				tabMain.setSelectedComponent(mn);
+
 			}
 		});
 		Btnhanghoa.setBackground(Color.LIGHT_GRAY);
 		Btnhanghoa.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		Btnhanghoa.setBounds(0, 56, 220, 55);
 		PanelLeft.add(Btnhanghoa);
-		
+
 		JButton Btndathang = new JButton("Quản lý đặt hàng");
 		Btndathang.setBackground(Color.LIGHT_GRAY);
 		Btndathang.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		Btndathang.setBounds(0, 114, 220, 50);
 		PanelLeft.add(Btndathang);
-		
-		
-	
-		
-		
-		
-		
+
 	}
 
 }

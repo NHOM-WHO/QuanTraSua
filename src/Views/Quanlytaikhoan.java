@@ -23,8 +23,6 @@ import org.w3c.dom.html.HTMLTableCaptionElement;
 import Models.Employees;
 import Viewspopup.Manager_crud_employee;
 
-
-
 import java.awt.Font;
 
 import javax.management.modelmbean.ModelMBean;
@@ -61,85 +59,83 @@ import java.awt.event.ComponentEvent;
 import javax.swing.JLabel;
 
 public class Quanlytaikhoan extends JPanel {
-	
+
 	private JTable table;
-	private JScrollPane scrollPane;                                                                                                                                                                                                                                  
+	private JScrollPane scrollPane;
 	Connection conn = null;
-    PreparedStatement pst = null;
-    ResultSet rs = null;
-    ResultSetMetaData rsmd = null;
-    Statement st = null;
-    Vector vtCol = null;
-    Vector vtData = null;  
-    private JTextField txtUsername;
-    private JTextField txtPassword;
-    private JTextField txtName;
-    private JTextField txtPhone;
-    private JTextField txtPermission;
-    private JTextField txtSalary;
-    
-    void load() {
+	PreparedStatement pst = null;
+	ResultSet rs = null;
+	ResultSetMetaData rsmd = null;
+	Statement st = null;
+	Vector vtCol = null;
+	Vector vtData = null;
+	private JTextField txtUsername;
+	private JTextField txtPassword;
+	private JTextField txtName;
+	private JTextField txtPhone;
+	private JTextField txtPermission;
+	private JTextField txtSalary;
+
+	void load() {
 		Vector vtRow = null;
 		vtCol = new Vector();
-        vtData = new Vector();
-        
-        
-        try {
+		vtData = new Vector();
+
+		try {
 			conn = connect.getConnection();
 		} catch (SQLException e1) {
-			
+
 			e1.printStackTrace();
 		}
-        String sql = "select * from Employees where(1=1) order by ID desc";
-        try {
-        	
-            st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-            rs = st.executeQuery(sql);
-            rsmd = rs.getMetaData();
-            for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-                vtCol.add(rsmd.getColumnName(i));
-            }
-            rs.afterLast();
-            while (rs.previous()) {  
-            	vtRow = new Vector();
-                
-                    vtRow.add(rs.getString("ID"));
-                    vtRow.add(rs.getString("USERNAME"));
-                    vtRow.add(rs.getString("PASSWORD"));
-                    vtRow.add(rs.getString("NAME"));
-                    vtRow.add(rs.getString("PHONENUMBER"));
-                    vtRow.add(rs.getString("PERMISSION"));
-                    vtRow.add(rs.getString("SALARY"));
-             
-                
-                vtData.add(vtRow);
-            }
-            table.setModel(new DefaultTableModel(vtData, vtCol){
-                
-                    
-            });
-        } catch (SQLException ex) {
-           System.err.printf(null,ex);
-        }finally{
-            try {
-                conn.close();
-                st.close();
-                rs.close();
-            } catch (Exception e3) {
-                System.out.println(e3);
-            }
-        }
-    }
+		String sql = "select * from Employees where(1=1) order by ID desc";
+		try {
+
+			st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			rs = st.executeQuery(sql);
+			rsmd = rs.getMetaData();
+			for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+				vtCol.add(rsmd.getColumnName(i));
+			}
+			rs.afterLast();
+			while (rs.previous()) {
+				vtRow = new Vector();
+
+				vtRow.add(rs.getString("ID"));
+				vtRow.add(rs.getString("USERNAME"));
+				vtRow.add(rs.getString("PASSWORD"));
+				vtRow.add(rs.getString("NAME"));
+				vtRow.add(rs.getString("PHONENUMBER"));
+				vtRow.add(rs.getString("PERMISSION"));
+				vtRow.add(rs.getString("SALARY"));
+
+				vtData.add(vtRow);
+			}
+			table.setModel(new DefaultTableModel(vtData, vtCol) {
+
+			});
+		} catch (SQLException ex) {
+			System.err.printf(null, ex);
+		} finally {
+			try {
+				conn.close();
+				st.close();
+				rs.close();
+			} catch (Exception e3) {
+				System.out.println(e3);
+			}
+		}
+	}
+
 	/**
 	 * Create the panel.
-	 * @throws SQLException 
+	 * 
+	 * @throws SQLException
 	 */
 	/**
 	 * 
 	 */
-    
-   
-    public  Quanlytaikhoan() {
+
+	public Quanlytaikhoan() {
 		setBackground(new Color(32, 178, 170));
 		setLayout(null);
 		JPanel panel = new JPanel();
@@ -167,23 +163,23 @@ public class Quanlytaikhoan extends JPanel {
 		JButton Btnsua = new JButton("Sửa");
 		Btnsua.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Connection connection=null;
-				
-				
-					int ret = JOptionPane.showConfirmDialog(null,"Bạn có chắc chắc muốn sửa!","yes",JOptionPane.YES_NO_OPTION);
-					if(ret != JOptionPane.YES_OPTION) {
-						 return ;
-						}
+				Connection connection = null;
+
+				int ret = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắc muốn sửa!", "yes",
+						JOptionPane.YES_NO_OPTION);
+				if (ret != JOptionPane.YES_OPTION) {
+					return;
+				}
 				try {
 					DefaultTableModel d1 = (DefaultTableModel) table.getModel();
-					int select=table.getSelectedRow();
-					String ID=d1.getValueAt(select, 0).toString();
-					
-					connection=connect.getConnection();
-					String query="UPDATE  Employees SET USERNAME=?,PASSWORD=?,NAME=?,PHONENUMBER=?,PERMISSION=?,SALARY=? WHERE ID=?";
-					 
-					PreparedStatement ps=connection.prepareStatement(query);
-					
+					int select = table.getSelectedRow();
+					String ID = d1.getValueAt(select, 0).toString();
+
+					connection = connect.getConnection();
+					String query = "UPDATE  Employees SET USERNAME=?,PASSWORD=?,NAME=?,PHONENUMBER=?,PERMISSION=?,SALARY=? WHERE ID=?";
+
+					PreparedStatement ps = connection.prepareStatement(query);
+
 					ps.setString(1, txtUsername.getText());
 					ps.setString(2, txtPassword.getText());
 					ps.setString(3, txtName.getText());
@@ -191,193 +187,184 @@ public class Quanlytaikhoan extends JPanel {
 					ps.setString(5, txtPermission.getText());
 					ps.setString(6, txtSalary.getText());
 					ps.setString(7, ID);
-					
-					int k =ps.executeUpdate();
-					
+
+					int k = ps.executeUpdate();
+
 					JOptionPane.showMessageDialog(null, "Đã sửa thành công!");
-					
-					
+
 				} catch (Exception e2) {
-					JOptionPane.showMessageDialog(null, "Hãy chọn id!");  
-					
+					JOptionPane.showMessageDialog(null, "Hãy chọn id!");
+
 				}
-			
+
 			}
 		});
 		Btnsua.setBounds(117, 405, 85, 21);
 		panel_1.add(Btnsua);
 
-	
 		JButton Btnxoa = new JButton("Xóa");
 		Btnxoa.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				 int i = table.getSelectedRow();
-				int ret = JOptionPane.showConfirmDialog(null,"Bạn có chắc chắc muốn xóa!","yes",JOptionPane.YES_NO_OPTION);
-				if(ret != JOptionPane.YES_OPTION) {
-					 return;
-					}
+				int i = table.getSelectedRow();
+				int ret = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắc muốn xóa!", "yes",
+						JOptionPane.YES_NO_OPTION);
+				if (ret != JOptionPane.YES_OPTION) {
+					return;
+				}
 				try {
-					
+
 					conn = connect.getConnection();
-					 pst = conn.prepareStatement("Delete From Employees where ID= ?");
-					 TableModel model = table.getModel();
-					 String id = model.getValueAt(i, 0).toString();
-					 pst.setString(1, id);
-					 ret = pst.executeUpdate();
-					 if (ret != -1) {
-						  JOptionPane.showMessageDialog(null, "Tài khoản đã được xóa!");  
-						 }
-					
+					pst = conn.prepareStatement("Delete From Employees where ID= ?");
+					TableModel model = table.getModel();
+					String id = model.getValueAt(i, 0).toString();
+					pst.setString(1, id);
+					ret = pst.executeUpdate();
+					if (ret != -1) {
+						JOptionPane.showMessageDialog(null, "Tài khoản đã được xóa!");
+					}
+
 				} catch (Exception e2) {
-					JOptionPane.showMessageDialog(null, "Hãy chọn id!");  
-					
+					JOptionPane.showMessageDialog(null, "Hãy chọn id!");
+
 				}
 			}
 		});
 		Btnxoa.setBounds(10, 405, 85, 21);
 		panel_1.add(Btnxoa);
-		
-		
+
 		JButton btnNewButton = new JButton("Load");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Vector vtRow = null;
 				vtCol = new Vector();
-		        vtData = new Vector();
-		        
-		        
-		        try {
+				vtData = new Vector();
+
+				try {
 					conn = connect.getConnection();
 				} catch (SQLException e1) {
-					
+
 					e1.printStackTrace();
 				}
-		        String sql = "select * from Employees where(1=1) order by ID desc";
-		        try {
-		        	
-		            st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-		            rs = st.executeQuery(sql);
-		            rsmd = rs.getMetaData();
-		            for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-		                vtCol.add(rsmd.getColumnName(i));
-		            }
-		            rs.afterLast();
-		            while (rs.previous()) {  
-		            	vtRow = new Vector();
-		                
-		                    vtRow.add(rs.getString("ID"));
-		                    vtRow.add(rs.getString("USERNAME"));
-		                    vtRow.add(rs.getString("PASSWORD"));
-		                    vtRow.add(rs.getString("NAME"));
-		                    vtRow.add(rs.getString("PHONENUMBER"));
-		                    vtRow.add(rs.getString("PERMISSION"));
-		                    vtRow.add(rs.getString("SALARY"));
-		             
-		                
-		                vtData.add(vtRow);
-		            }
-		            table.setModel(new DefaultTableModel(vtData, vtCol){
-		                
-		                    
-		            });
-		        } catch (SQLException ex) {
-		           System.err.printf(null,ex);
-		        }finally{
-		            try {
-		                conn.close();
-		                st.close();
-		                rs.close();
-		            } catch (Exception e3) {
-		                System.out.println(e3);
-		            }
-		        }
-		   
-		        
+				String sql = "select * from Employees where(1=1) order by ID desc";
+				try {
+
+					st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+					rs = st.executeQuery(sql);
+					rsmd = rs.getMetaData();
+					for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+						vtCol.add(rsmd.getColumnName(i));
+					}
+					rs.afterLast();
+					while (rs.previous()) {
+						vtRow = new Vector();
+
+						vtRow.add(rs.getString("ID"));
+						vtRow.add(rs.getString("USERNAME"));
+						vtRow.add(rs.getString("PASSWORD"));
+						vtRow.add(rs.getString("NAME"));
+						vtRow.add(rs.getString("PHONENUMBER"));
+						vtRow.add(rs.getString("PERMISSION"));
+						vtRow.add(rs.getString("SALARY"));
+
+						vtData.add(vtRow);
+					}
+					table.setModel(new DefaultTableModel(vtData, vtCol) {
+
+					});
+				} catch (SQLException ex) {
+					System.err.printf(null, ex);
+				} finally {
+					try {
+						conn.close();
+						st.close();
+						rs.close();
+					} catch (Exception e3) {
+						System.out.println(e3);
+					}
+				}
+
 			}
 		});
 		btnNewButton.setBounds(10, 361, 85, 21);
 		panel_1.add(btnNewButton);
-		
+
 		JLabel label1 = new JLabel("Username");
 		label1.setFont(new Font("Trebuchet MS", Font.PLAIN, 13));
 		label1.setBounds(10, 46, 67, 13);
 		panel_1.add(label1);
-		
+
 		JLabel label2 = new JLabel("Password");
 		label2.setFont(new Font("Trebuchet MS", Font.PLAIN, 13));
 		label2.setBounds(10, 80, 67, 13);
 		panel_1.add(label2);
-		
+
 		JLabel label3 = new JLabel("Name");
 		label3.setFont(new Font("Trebuchet MS", Font.PLAIN, 13));
 		label3.setBounds(10, 120, 67, 13);
 		panel_1.add(label3);
-		
+
 		JLabel label4 = new JLabel("Phone");
 		label4.setFont(new Font("Trebuchet MS", Font.PLAIN, 13));
 		label4.setBounds(10, 161, 67, 13);
 		panel_1.add(label4);
-		
+
 		JLabel label5 = new JLabel("Permission");
 		label5.setFont(new Font("Trebuchet MS", Font.PLAIN, 13));
 		label5.setBounds(10, 199, 67, 13);
 		panel_1.add(label5);
-		
+
 		JLabel label6 = new JLabel("Salary");
 		label6.setFont(new Font("Trebuchet MS", Font.PLAIN, 13));
 		label6.setBounds(10, 238, 67, 13);
 		panel_1.add(label6);
-		
+
 		txtUsername = new JTextField();
 		txtUsername.setBounds(87, 44, 96, 19);
 		panel_1.add(txtUsername);
 		txtUsername.setColumns(10);
-		
+
 		txtPassword = new JTextField();
 		txtPassword.setColumns(10);
 		txtPassword.setBounds(87, 78, 96, 19);
 		panel_1.add(txtPassword);
-		
+
 		txtName = new JTextField();
 		txtName.setColumns(10);
 		txtName.setBounds(87, 118, 96, 19);
 		panel_1.add(txtName);
-		
+
 		txtPhone = new JTextField();
 		txtPhone.setColumns(10);
 		txtPhone.setBounds(87, 159, 96, 19);
 		panel_1.add(txtPhone);
-		
+
 		txtPermission = new JTextField();
 		txtPermission.setColumns(10);
 		txtPermission.setBounds(87, 197, 96, 19);
 		panel_1.add(txtPermission);
-		
+
 		txtSalary = new JTextField();
 		txtSalary.setColumns(10);
 		txtSalary.setBounds(87, 236, 96, 19);
 		panel_1.add(txtSalary);
-		
+
 		scrollPane = new JScrollPane();
 		scrollPane.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-			
-			
-				
-				
+
 			}
 		});
 		scrollPane.setBounds(10, 58, 541, 457);
 		add(scrollPane);
-		
+
 		table = new JTable();
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				DefaultTableModel d1 = (DefaultTableModel) table.getModel();
-				int select=table.getSelectedRow();
-				String ID=d1.getValueAt(select, 0).toString();
+				int select = table.getSelectedRow();
+				String ID = d1.getValueAt(select, 0).toString();
 				txtUsername.setText(d1.getValueAt(select, 1).toString());
 				txtPassword.setText(d1.getValueAt(select, 2).toString());
 				txtName.setText(d1.getValueAt(select, 3).toString());
@@ -389,5 +376,5 @@ public class Quanlytaikhoan extends JPanel {
 		scrollPane.setViewportView(table);
 		table.setAutoCreateRowSorter(true);
 		load();
-	}   
+	}
 }

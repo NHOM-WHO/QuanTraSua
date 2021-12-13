@@ -72,113 +72,112 @@ public class GDdangnhap extends JFrame {
 		lblNewLabel.setBackground(new Color(255, 255, 255));
 		lblNewLabel.setBounds(241, 47, 142, 52);
 		contentPane.add(lblNewLabel);
-		
+
 		JLabel lbUsername = new JLabel("Username");
 		lbUsername.setForeground(new Color(255, 255, 255));
 		lbUsername.setFont(new Font("Arial", Font.PLAIN, 16));
 		lbUsername.setBounds(51, 125, 100, 44);
 		contentPane.add(lbUsername);
-		
+
 		JLabel lbPassword = new JLabel("Password");
 		lbPassword.setForeground(new Color(255, 255, 255));
 		lbPassword.setFont(new Font("Arial", Font.PLAIN, 16));
 		lbPassword.setBounds(51, 199, 100, 44);
 		contentPane.add(lbPassword);
-		
+
 		txtUid = new JTextField();
 		txtUid.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if(e.getKeyCode() == e.VK_ENTER){
+				if (e.getKeyCode() == e.VK_ENTER) {
 					txtPwd.requestFocus();
-					}
+				}
 			}
 		});
-	
+
 		lbUsername.setLabelFor(txtUid);
 		txtUid.setBounds(161, 133, 263, 30);
 		contentPane.add(txtUid);
 		txtUid.setColumns(10);
-		
+
 		txtPwd = new JPasswordField();
 		txtPwd.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if(e.getKeyCode() == e.VK_ENTER){
+				if (e.getKeyCode() == e.VK_ENTER) {
 					connect cn = new connect();
 					Connection connection = null;
 					try {
-						connection=cn.getConnection();
+						connection = cn.getConnection();
 						String sql = "Select * from Employees Where USERNAME =? and PASSWORD=?";
-						PreparedStatement pst =connection.prepareCall(sql);
+						PreparedStatement pst = connection.prepareCall(sql);
 						pst.setString(1, txtUid.getText());
 						pst.setString(2, txtPwd.getText());
 						ResultSet rs = pst.executeQuery();
-						if(rs.next())
-						{
-							String s1 =rs.getString("PERMISSION");
-							if(s1.equalsIgnoreCase("manager")) {
-								GDadmin dadmin=new GDadmin();
+						if (rs.next()) {
+							String s1 = rs.getString("PERMISSION");
+							if (s1.equalsIgnoreCase("manager")) {
+								GDadmin dadmin = new GDadmin();
 								dadmin.setVisible(true);
 								dispose();
 							}
 							if (s1.equalsIgnoreCase("employee")) {
-		                       	GDnhanvien gDnhanvien= new GDnhanvien();
-		                       	gDnhanvien.setVisible(true);
-		                       	dispose();
-		                    } 
-						}else {
-							JOptionPane.showMessageDialog(null,"Sai tài khoản mật khẩu");;
+								GDnhanvien gDnhanvien = new GDnhanvien();
+								gDnhanvien.setVisible(true);
+								dispose();
+							}
+						} else {
+							JOptionPane.showMessageDialog(null, "Sai tài khoản mật khẩu");
+							;
 						}
 					} catch (SQLException ex) {
-						JOptionPane.showMessageDialog(null,ex);
+						JOptionPane.showMessageDialog(null, ex);
 					}
-					}
+				}
 			}
 		});
 		lbPassword.setLabelFor(txtPwd);
 		txtPwd.setBounds(161, 209, 263, 30);
 		contentPane.add(txtPwd);
-		
+
 		JButton btnDangnhap = new JButton("X\u00E1c Nh\u1EADn");
 		btnDangnhap.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				connect cn = new connect();
 				Connection connection = null;
 				try {
-					connection=cn.getConnection();
+					connection = cn.getConnection();
 					String sql = "Select * from Employees Where USERNAME =? and PASSWORD=?";
-					PreparedStatement pst =connection.prepareCall(sql);
+					PreparedStatement pst = connection.prepareCall(sql);
 					pst.setString(1, txtUid.getText());
 					pst.setString(2, txtPwd.getText());
 					ResultSet rs = pst.executeQuery();
-					if(rs.next())
-					{
-						String s1 =rs.getString("PERMISSION");
-						if(s1.equalsIgnoreCase("manager")) {
-							GDadmin dadmin=new GDadmin();
+					if (rs.next()) {
+						String s1 = rs.getString("PERMISSION");
+						if (s1.equalsIgnoreCase("manager")) {
+							GDadmin dadmin = new GDadmin();
 							dadmin.setVisible(true);
 							dispose();
 						}
 						if (s1.equalsIgnoreCase("employee")) {
-	                       	GDnhanvien gDnhanvien= new GDnhanvien();
-	                       	gDnhanvien.setVisible(true);
-	                       	dispose();
-	                    } 
-					}else {
-						JOptionPane.showMessageDialog(null,"Sai tài khoản mật khẩu");;
+							GDnhanvien gDnhanvien = new GDnhanvien();
+							gDnhanvien.setVisible(true);
+							dispose();
+						}
+					} else {
+						JOptionPane.showMessageDialog(null, "Sai tài khoản mật khẩu");
+						;
 					}
 				} catch (SQLException ex) {
-					JOptionPane.showMessageDialog(null,ex);
+					JOptionPane.showMessageDialog(null, ex);
 				}
 			}
 		});
 		btnDangnhap.setBounds(241, 282, 100, 35);
 		contentPane.add(btnDangnhap);
 		JFrame jf = new JFrame();
-	
+
 		jf.setLocationRelativeTo(null);
 	}
 
-	
 }
