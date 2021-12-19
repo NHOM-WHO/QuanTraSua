@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
@@ -29,10 +30,23 @@ public class Monan_crud extends JFrame {
 
 	private JPanel contentPane;
 	private String anh=null;
-
+	private File file;
 	/**
 	 * Launch the application.
 	 */
+	private byte[] ConvertFile(String filename) {
+		FileInputStream fileInputStream=null;
+		File file=new File(filename);
+		byte[] bFile=new byte[(int) file.length()];
+		try {
+			fileInputStream=new FileInputStream(file);
+			fileInputStream.read(bFile);
+			fileInputStream.close();
+		} catch (Exception e) {
+			bFile=null;
+		}
+		return bFile;
+	}
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -133,7 +147,7 @@ public class Monan_crud extends JFrame {
 				jFileChooser.setFileFilter(new FileTypeFilter(".png","PNG"));
 				int result =jFileChooser.showOpenDialog(null);
 				if(result==JFileChooser.APPROVE_OPTION) {
-					File file=jFileChooser.getSelectedFile();
+					 file=jFileChooser.getSelectedFile();
 					lblNewLabel_2.setIcon(new ImageIcon(file.getAbsolutePath()));
 					String anh=file.getAbsolutePath().replace("/", "//");
 				}
@@ -155,15 +169,16 @@ public class Monan_crud extends JFrame {
 				try {
 
 					connection = connect.getConnection();
-					String query = "INSERT INTO Food_Item SELECT  N'"+txtName.getText()+"',N'"+txtDescription.getText()+"',  N'"+txtUntilname.getText()+"',N'"+txtPrice.getText()+"',N'"+txtIdcate.getText()+"',BulkColumn FROM OPENROWSET(BULK N'"+anh+"', SINGLE_BLOB)  urlImage";
-//					String query = "INSERT INTO Food_Item VALUES(?,?,?,?,?,?)";
+//					String query = "INSERT INTO Food_Item SELECT  N'"+txtName.getText()+"',N'"+txtDescription.getText()+"',  N'"+txtUntilname.getText()+"',N'"+txtPrice.getText()+"',N'"+txtIdcate.getText()+"',BulkColumn FROM OPENROWSET(BULK N'"+anh+"', SINGLE_BLOB)  urlImage";
+					String query = "INSERT INTO Food_Item VALUES(?,?,?,?,?,?)";
 					PreparedStatement ps = connection.prepareStatement(query);
-//					ps.setString(1, txtName.getText());
-//					ps.setString(2, txtDescription.getText());
-//					ps.setString(3, anh);
-//					ps.setString(4, txtUntilname.getText());
-//					ps.setString(5, txtPrice.getText());
-//					ps.setString(6, txtIdcate.getText());
+					ps.setString(1, txtName.getText());
+					ps.setString(2, txtDescription.getText());
+					
+					ps.setString(3, txtUntilname.getText());
+					ps.setString(4, txtPrice.getText());
+					ps.setString(5, txtIdcate.getText());
+					ps.setBytes(6, ConvertFile(file.getAbsolutePath()));
 //					 
 					ps.execute();
 					JOptionPane.showMessageDialog(null, "saved");

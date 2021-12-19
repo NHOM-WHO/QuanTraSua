@@ -21,7 +21,7 @@ import javax.swing.table.TableModel;
 import org.w3c.dom.html.HTMLTableCaptionElement;
 
 import Models.Employees;
-import Viewspopup.Manager_crud_employee;
+
 
 import java.awt.Font;
 
@@ -76,7 +76,57 @@ public class Quanlytaikhoan extends JPanel {
 	private JTextField txtPermission;
 	private JTextField txtSalary;
 
-	void load() {
+	public void load() {
+		Vector vtRow = null;
+		vtCol = new Vector();
+		vtData = new Vector();
+
+		try {
+			conn = connect.getConnection();
+		} catch (SQLException e1) {
+
+			e1.printStackTrace();
+		}
+		String sql = "select * from Employees where(1=1) order by ID desc";
+		try {
+
+			st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			rs = st.executeQuery(sql);
+			rsmd = rs.getMetaData();
+			for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+				vtCol.add(rsmd.getColumnName(i));
+			}
+			rs.afterLast();
+			while (rs.previous()) {
+				vtRow = new Vector();
+
+				vtRow.add(rs.getString("ID"));
+				vtRow.add(rs.getString("USERNAME"));
+				vtRow.add(rs.getString("PASSWORD"));
+				vtRow.add(rs.getString("NAME"));
+				vtRow.add(rs.getString("PHONENUMBER"));
+				vtRow.add(rs.getString("PERMISSION"));
+				vtRow.add(rs.getString("SALARY"));
+
+				vtData.add(vtRow);
+			}
+			table.setModel(new DefaultTableModel(vtData, vtCol) {
+
+			});
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+				st.close();
+				rs.close();
+			} catch (Exception e3) {
+				System.out.println(e3);
+			}
+		}
+	}
+
+	public void refresh() {
 		Vector vtRow = null;
 		vtCol = new Vector();
 		vtData = new Vector();
@@ -152,8 +202,26 @@ public class Quanlytaikhoan extends JPanel {
 		JButton Btnthem = new JButton("Thêm");
 		Btnthem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Manager_crud_employee cd = new Manager_crud_employee();
-				cd.setVisible(true);
+				Connection connection = null;
+				try {
+
+					connection = connect.getConnection();
+					String query = "INSERT INTO Employees VALUES(?,?,?,?,?,?)";
+					PreparedStatement ps = connection.prepareStatement(query);
+
+					ps.setString(1, txtUsername.getText());
+					ps.setString(2, txtPassword.getText());
+					ps.setString(3, txtName.getText());
+					ps.setString(4, txtPhone.getText());
+					ps.setString(5, txtPermission.getText());
+					ps.setString(6, txtSalary.getText());
+					ps.executeUpdate();
+					refresh();
+					JOptionPane.showMessageDialog(null, "saved");
+				
+				} catch (Exception e2) {
+					System.out.printf(null, e);
+				}
 
 			}
 		});
@@ -196,7 +264,9 @@ public class Quanlytaikhoan extends JPanel {
 					JOptionPane.showMessageDialog(null, "Hãy chọn id!");
 
 				}
-
+				DefaultTableModel model = (DefaultTableModel) table.getModel();
+				model.getDataVector();
+				refresh();
 			}
 		});
 		Btnsua.setBounds(117, 405, 85, 21);
@@ -227,6 +297,7 @@ public class Quanlytaikhoan extends JPanel {
 					JOptionPane.showMessageDialog(null, "Hãy chọn id!");
 
 				}
+				refresh();
 			}
 		});
 		Btnxoa.setBounds(10, 405, 85, 21);
@@ -371,6 +442,7 @@ public class Quanlytaikhoan extends JPanel {
 				txtPhone.setText(d1.getValueAt(select, 4).toString());
 				txtPermission.setText(d1.getValueAt(select, 5).toString());
 				txtSalary.setText(d1.getValueAt(select, 6).toString());
+				
 			}
 		});
 		scrollPane.setViewportView(table);

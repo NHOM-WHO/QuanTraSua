@@ -14,7 +14,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import Viewspopup.danhmuc_crud;
+
 
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
@@ -51,7 +51,7 @@ public class Danhmuc extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	void load() {
+	public void load() {
 		Vector vtRow = null;
 		vtCol = new Vector();
 		vtData = new Vector();
@@ -95,6 +95,53 @@ public class Danhmuc extends JPanel {
 				System.out.println(e3);
 			}
 		}
+	}
+
+	public void refresh() {
+		Vector vtRow = null;
+		vtCol = new Vector();
+		vtData = new Vector();
+
+		try {
+			conn = connect.getConnection();
+		} catch (SQLException e1) {
+
+			e1.printStackTrace();
+		}
+		String sql = "select * from Food_Category where(1=1) order by id desc";
+		try {
+
+			st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			rs = st.executeQuery(sql);
+			rsmd = rs.getMetaData();
+			for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+				vtCol.add(rsmd.getColumnName(i));
+			}
+			rs.afterLast();
+			while (rs.previous()) {
+				vtRow = new Vector();
+
+				vtRow.add(rs.getString("ID"));
+				vtRow.add(rs.getString("NAME"));
+				vtRow.add(rs.getString("SLUG"));
+
+				vtData.add(vtRow);
+			}
+			table.setModel(new DefaultTableModel(vtData, vtCol) {
+
+			});
+		} catch (SQLException ex) {
+			System.err.printf(null, ex);
+		} finally {
+			try {
+				conn.close();
+				st.close();
+				rs.close();
+			} catch (Exception e3) {
+				System.out.println(e3);
+			}
+		}
+
 	}
 
 	public Danhmuc() {
@@ -141,8 +188,22 @@ public class Danhmuc extends JPanel {
 			JButton Btnthem = new JButton("Thêm");
 			Btnthem.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					danhmuc_crud crud = new danhmuc_crud();
-					crud.setVisible(true);
+					Connection connection = null;
+					try {
+
+						connection = connect.getConnection();
+						String query = "INSERT INTO Food_Category VALUES(?,?)";
+						PreparedStatement ps = connection.prepareStatement(query);
+
+						ps.setString(1, txtName.getText());
+						ps.setString(2, txtSlug.getText());
+
+						ps.execute();
+						JOptionPane.showMessageDialog(null, "saved");
+						refresh();
+					} catch (Exception e2) {
+						System.out.printf(null, e);
+					}
 				}
 			});
 			Btnthem.setBounds(117, 361, 85, 21);
@@ -181,6 +242,9 @@ public class Danhmuc extends JPanel {
 
 						JOptionPane.showMessageDialog(null, "Hãy chon ID!");
 					}
+					DefaultTableModel model = (DefaultTableModel) table.getModel();
+					model.getDataVector();
+					refresh();
 				}
 			});
 			Btnsua.setBounds(117, 405, 85, 21);
@@ -209,7 +273,7 @@ public class Danhmuc extends JPanel {
 					} catch (Exception e2) {
 						JOptionPane.showMessageDialog(null, "Hãy chon ID!");
 					}
-
+					refresh();
 				}
 			});
 			Btnxoa.setBounds(10, 405, 85, 21);
