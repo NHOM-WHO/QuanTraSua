@@ -41,7 +41,9 @@ public class GDadmin extends JFrame {
 			public void run() {
 				try {
 					GDadmin frame = new GDadmin();
+					Quanlytaikhoan qltk =new Quanlytaikhoan();
 					frame.setVisible(true);
+					qltk.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
