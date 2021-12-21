@@ -22,7 +22,6 @@ import org.w3c.dom.html.HTMLTableCaptionElement;
 
 import Models.Employees;
 
-
 import java.awt.Font;
 
 import javax.management.modelmbean.ModelMBean;
@@ -73,7 +72,6 @@ public class Quanlytaikhoan extends JPanel {
 	private JTextField txtPassword;
 	private JTextField txtName;
 	private JTextField txtPhone;
-	private JTextField txtPermission;
 	private JTextField txtSalary;
 
 	public void load() {
@@ -198,7 +196,11 @@ public class Quanlytaikhoan extends JPanel {
 		panel_1.setBounds(553, 57, 202, 458);
 		add(panel_1);
 		panel_1.setLayout(null);
-
+		JComboBox cmbPermission = new JComboBox();
+		cmbPermission.setModel(new DefaultComboBoxModel(new String[] {"employee", "manager"}));
+		cmbPermission.setBounds(87, 196, 96, 21);
+		panel_1.add(cmbPermission);
+		
 		JButton Btnthem = new JButton("Thêm");
 		Btnthem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -213,12 +215,14 @@ public class Quanlytaikhoan extends JPanel {
 					ps.setString(2, txtPassword.getText());
 					ps.setString(3, txtName.getText());
 					ps.setString(4, txtPhone.getText());
-					ps.setString(5, txtPermission.getText());
+					String perString;
+					perString = cmbPermission.getSelectedItem().toString();
+					ps.setString(5, perString);
 					ps.setString(6, txtSalary.getText());
 					ps.executeUpdate();
-					refresh();
+					load();
 					JOptionPane.showMessageDialog(null, "saved");
-				
+
 				} catch (Exception e2) {
 					System.out.printf(null, e);
 				}
@@ -252,7 +256,9 @@ public class Quanlytaikhoan extends JPanel {
 					ps.setString(2, txtPassword.getText());
 					ps.setString(3, txtName.getText());
 					ps.setString(4, txtPhone.getText());
-					ps.setString(5, txtPermission.getText());
+					String perString;
+					perString = cmbPermission.getSelectedItem().toString();
+					ps.setString(5, perString);
 					ps.setString(6, txtSalary.getText());
 					ps.setString(7, ID);
 
@@ -266,7 +272,7 @@ public class Quanlytaikhoan extends JPanel {
 				}
 				DefaultTableModel model = (DefaultTableModel) table.getModel();
 				model.getDataVector();
-				refresh();
+				load();
 			}
 		});
 		Btnsua.setBounds(117, 405, 85, 21);
@@ -297,7 +303,7 @@ public class Quanlytaikhoan extends JPanel {
 					JOptionPane.showMessageDialog(null, "Hãy chọn id!");
 
 				}
-				refresh();
+				load();
 			}
 		});
 		Btnxoa.setBounds(10, 405, 85, 21);
@@ -390,36 +396,37 @@ public class Quanlytaikhoan extends JPanel {
 		panel_1.add(label6);
 
 		txtUsername = new JTextField();
+		txtUsername.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		txtUsername.setBounds(87, 44, 96, 19);
 		panel_1.add(txtUsername);
 		txtUsername.setColumns(10);
 
 		txtPassword = new JTextField();
+		txtPassword.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		txtPassword.setColumns(10);
 		txtPassword.setBounds(87, 78, 96, 19);
 		panel_1.add(txtPassword);
 
 		txtName = new JTextField();
+		txtName.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		txtName.setColumns(10);
 		txtName.setBounds(87, 118, 96, 19);
 		panel_1.add(txtName);
 
 		txtPhone = new JTextField();
+		txtPhone.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		txtPhone.setColumns(10);
 		txtPhone.setBounds(87, 159, 96, 19);
 		panel_1.add(txtPhone);
 
-		txtPermission = new JTextField();
-		txtPermission.setColumns(10);
-		txtPermission.setBounds(87, 197, 96, 19);
-		panel_1.add(txtPermission);
-
 		txtSalary = new JTextField();
+		txtSalary.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		txtSalary.setColumns(10);
 		txtSalary.setBounds(87, 236, 96, 19);
 		panel_1.add(txtSalary);
 
 		scrollPane = new JScrollPane();
+		scrollPane.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		scrollPane.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -440,9 +447,18 @@ public class Quanlytaikhoan extends JPanel {
 				txtPassword.setText(d1.getValueAt(select, 2).toString());
 				txtName.setText(d1.getValueAt(select, 3).toString());
 				txtPhone.setText(d1.getValueAt(select, 4).toString());
-				txtPermission.setText(d1.getValueAt(select, 5).toString());
+				String perS=d1.getValueAt(select, 5).toString();
+				switch(perS) {
+				case "employee":
+					cmbPermission.setSelectedIndex(0);
+					break;
+				case "manager":
+					cmbPermission.setSelectedIndex(1);
+					break;
+					
+				}
 				txtSalary.setText(d1.getValueAt(select, 6).toString());
-				
+
 			}
 		});
 		scrollPane.setViewportView(table);

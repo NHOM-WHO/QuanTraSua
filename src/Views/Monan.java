@@ -15,8 +15,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import Viewspopup.FileTypeFilter;
 import Viewspopup.Monan_crud;
@@ -37,6 +41,9 @@ import java.util.Vector;
 import java.awt.event.ActionEvent;
 import java.awt.*;
 import javax.swing.border.MatteBorder;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
 
 public class Monan extends JPanel {
 	private File file;
@@ -93,6 +100,7 @@ public class Monan extends JPanel {
 				vtCol.add(rsmd.getColumnName(i));
 
 			}
+
 			rs.afterLast();
 			while (rs.previous()) {
 				vtRow = new Vector();
@@ -104,7 +112,6 @@ public class Monan extends JPanel {
 				vtRow.add(rs.getString("unitPrice"));
 				vtRow.add(rs.getInt("idCategory"));
 				vtRow.add(rs.getBytes("urlImage"));
-
 				vtData.add(vtRow);
 			}
 
@@ -123,7 +130,6 @@ public class Monan extends JPanel {
 				e3.printStackTrace();
 			}
 		}
-
 	}
 
 	public Monan() {
@@ -137,9 +143,18 @@ public class Monan extends JPanel {
 		panel.setLayout(null);
 
 		JTextField Txtsearch = new JTextField();
+		Txtsearch.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				DefaultTableModel model= (DefaultTableModel) table.getModel();
+				TableRowSorter<DefaultTableModel> tRowSorter =new TableRowSorter<DefaultTableModel>(model);
+				table.setRowSorter(tRowSorter);
+				tRowSorter.setRowFilter(RowFilter.regexFilter(Txtsearch.getText().trim()));
+			}
+		});
 		Txtsearch.setForeground(new Color(169, 169, 169));
 		Txtsearch.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		Txtsearch.setText("search mon an");
+		
 		Txtsearch.setBounds(366, 6, 176, 19);
 		panel.add(Txtsearch);
 		Txtsearch.setColumns(10);
@@ -171,9 +186,10 @@ public class Monan extends JPanel {
 					ps.setString(5, txtIdcate.getText());
 					ps.setBytes(6, ConvertFile(file.getAbsolutePath()));
 //					 
-					ps.execute();
+					ps.executeUpdate();
+					load();
 					JOptionPane.showMessageDialog(null, "saved");
-
+					
 				} catch (Exception e2) {
 					e2.printStackTrace();
 				}
@@ -181,75 +197,85 @@ public class Monan extends JPanel {
 
 			}
 		});
-		Btnthem.setBounds(107, 360, 85, 21);
+		Btnthem.setBounds(107, 396, 85, 21);
 		panel_1.add(Btnthem);
 
 		JButton Btnsua = new JButton("Sửa");
-		Btnsua.setBounds(107, 391, 85, 21);
+		Btnsua.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Connection connection = null;
+
+				int ret = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắc muốn sửa!", "yes",
+						JOptionPane.YES_NO_OPTION);
+				if (ret != JOptionPane.YES_OPTION) {
+					return;
+				}
+				try {
+					DefaultTableModel d1 = (DefaultTableModel) table.getModel();
+					int select = table.getSelectedRow();
+					String ID = d1.getValueAt(select, 0).toString();
+
+					connection = connect.getConnection();
+					String query = "UPDATE  Food_Item SET name=?,description=?,unitName=?,unitPrice=?,idCategory=?,urlImage=? WHERE id=?";
+
+					PreparedStatement ps = connection.prepareStatement(query);
+
+					ps.setString(1, txtName.getText());
+					ps.setString(2, txtDescription.getText());
+					ps.setString(3, txtUntilname.getText());
+					ps.setString(4, txtPrice.getText());
+					ps.setString(5, txtIdcate.getText());
+					ps.setBytes(6, ConvertFile(file.getAbsolutePath()));
+					ps.setString(7, ID);
+
+					int k = ps.executeUpdate();
+
+					JOptionPane.showMessageDialog(null, "Đã sửa thành công!");
+
+				} catch (Exception e2) {
+					JOptionPane.showMessageDialog(null,"Hãy chọn ảnh!");
+
+				}
+				DefaultTableModel model = (DefaultTableModel) table.getModel();
+				model.getDataVector();
+				load();
+			
+			}
+		});
+		Btnsua.setBounds(107, 427, 85, 21);
 		panel_1.add(Btnsua);
 
 		JButton Btnxoa = new JButton("Xóa");
-		Btnxoa.setBounds(10, 391, 85, 21);
-		panel_1.add(Btnxoa);
-
-		JButton Btnload = new JButton("Load");
-		Btnload.addActionListener(new ActionListener() {
+		Btnxoa.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Vector vtRow = null;
-				vtCol = new Vector();
-				vtData = new Vector();
-
+				int i = table.getSelectedRow();
+				int ret = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắc muốn xóa!", "yes",
+						JOptionPane.YES_NO_OPTION);
+				if (ret != JOptionPane.YES_OPTION) {
+					return;
+				}
 				try {
+
 					conn = connect.getConnection();
-				} catch (SQLException e1) {
+					pst = conn.prepareStatement("Delete From Food_Item where id= ?");
+					TableModel model = table.getModel();
+					String ID = model.getValueAt(i, 0).toString();
+					pst.setString(1, ID);
+					ret = pst.executeUpdate();
+					load();
+					if (ret != -1) {
+						JOptionPane.showMessageDialog(null, "Item đã được xóa!");
+					}
 
-					e1.printStackTrace();
+				} catch (Exception e2) {
+					JOptionPane.showMessageDialog(null, "Hãy chọn id!");
+
 				}
-				String sql = "select * from Food_Item where(1=1) order by id desc";
-				try {
 
-					st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-					rs = st.executeQuery(sql);
-					rsmd = rs.getMetaData();
-					for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-						vtCol.add(rsmd.getColumnName(i));
-
-					}
-					rs.afterLast();
-					while (rs.previous()) {
-						vtRow = new Vector();
-
-						vtRow.add(rs.getInt("id"));
-						vtRow.add(rs.getString("name"));
-						vtRow.add(rs.getString("description"));
-						vtRow.add(rs.getString("unitName"));
-						vtRow.add(rs.getString("unitPrice"));
-						vtRow.add(rs.getInt("idCategory"));
-						vtRow.add(rs.getBytes("urlImage"));
-
-						vtData.add(vtRow);
-					}
-
-					table.setModel(new DefaultTableModel(vtData, vtCol) {
-
-					});
-
-				} catch (SQLException ex) {
-					ex.printStackTrace();
-				} finally {
-					try {
-						conn.close();
-						st.close();
-						rs.close();
-					} catch (Exception e3) {
-						e3.printStackTrace();
-					}
-				}
-				
 			}
 		});
-		Btnload.setBounds(10, 360, 85, 21);
-		panel_1.add(Btnload);
+		Btnxoa.setBounds(10, 427, 85, 21);
+		panel_1.add(Btnxoa);
 
 		txtName = new JTextField();
 		txtName.setBounds(76, 40, 96, 19);
@@ -298,7 +324,7 @@ public class Monan extends JPanel {
 
 		JLabel lblNewLabel_2_1 = new JLabel("");
 		lblNewLabel_2_1.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
-		lblNewLabel_2_1.setBounds(10, 184, 99, 120);
+		lblNewLabel_2_1.setBounds(10, 184, 170, 171);
 		panel_1.add(lblNewLabel_2_1);
 
 		JButton btnChoose = new JButton("Choose");
@@ -322,8 +348,67 @@ public class Monan extends JPanel {
 				}
 			}
 		});
+		JButton Btnload = new JButton("Load");
+		Btnload.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Vector vtRow = null;
+				vtCol = new Vector();
+				vtData = new Vector();
+
+				try {
+					conn = connect.getConnection();
+				} catch (SQLException e1) {
+
+					e1.printStackTrace();
+				}
+				String sql = "select * from Food_Item where(1=1) order by id desc";
+				try {
+
+					st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+					rs = st.executeQuery(sql);
+					rsmd = rs.getMetaData();
+					for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+						vtCol.add(rsmd.getColumnName(i));
+
+					}
+
+					rs.afterLast();
+					while (rs.previous()) {
+						vtRow = new Vector();
+
+						vtRow.add(rs.getInt("id"));
+						vtRow.add(rs.getString("name"));
+						vtRow.add(rs.getString("description"));
+						vtRow.add(rs.getString("unitName"));
+						vtRow.add(rs.getString("unitPrice"));
+						vtRow.add(rs.getInt("idCategory"));
+						vtRow.add(rs.getBytes("urlImage"));
+
+						vtData.add(vtRow);
+					}
+
+					table.setModel(new DefaultTableModel(vtData, vtCol) {
+
+					});
+
+				} catch (SQLException ex) {
+					ex.printStackTrace();
+				} finally {
+					try {
+						conn.close();
+						st.close();
+						rs.close();
+					} catch (Exception e3) {
+						e3.printStackTrace();
+					}
+				}
+
+			}
+		});
+		Btnload.setBounds(10, 396, 85, 21);
+		panel_1.add(Btnload);
 		btnChoose.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		btnChoose.setBounds(107, 239, 95, 21);
+		btnChoose.setBounds(50, 365, 95, 21);
 		panel_1.add(btnChoose);
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 58, 541, 457);
@@ -341,21 +426,20 @@ public class Monan extends JPanel {
 				txtUntilname.setText(d1.getValueAt(select, 3).toString());
 				txtPrice.setText(d1.getValueAt(select, 4).toString());
 				txtIdcate.setText(d1.getValueAt(select, 5).toString());
-				lblNewLabel_2_1.setText(d1.getValueAt(select, 6).toString());
-				
-				ImageIcon imageIcon = new ImageIcon(new ImageIcon(filename).getImage().getScaledInstance(
+
+				byte[] img = (byte[]) d1.getValueAt(select, 6);
+				ImageIcon imageIcon = new ImageIcon(new ImageIcon(img).getImage().getScaledInstance(
 						lblNewLabel_2_1.getWidth(), lblNewLabel_2_1.getHeight(), Image.SCALE_SMOOTH));
 				lblNewLabel_2_1.setIcon(imageIcon);
 			}
 		});
 
-		table.setRowHeight(100);
-		table.setRowHeight(100);
 		table.setBounds(10, 58, 541, 457);
 
 		scrollPane.setViewportView(table);
 		table.setAutoCreateRowSorter(true);
 		load();
+
 	}
 
 }
