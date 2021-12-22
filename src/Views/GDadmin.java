@@ -32,10 +32,16 @@ public class GDadmin extends JFrame {
 	private Quanlytaikhoan qltk;
 	private JPanel contentPane;
 	private thongke tkThongke;
-	private BanAn bAn;
+
+	
+
 	private Bill bill;
 	private Customer customer;
 	private Ship ship;
+	private BanAn bn;
+
+
+
 	/**
 	 * Launch the application.
 	 */
@@ -51,9 +57,10 @@ public class GDadmin extends JFrame {
 					e.printStackTrace();
 				}
 			}
+		
 		});
 	}
-
+	
 	/**
 	 * Create the frame.
 	 */
@@ -157,25 +164,50 @@ public class GDadmin extends JFrame {
 		PanelLeft.add(Btnhanghoa);
 
 		JButton Btndathang = new JButton("Quản lý đặt hàng");
+
 		Btndathang.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (bAn == null && bill == null&&customer==null&&ship==null) {
+				if (bn == null && bill == null&&customer==null&&ship==null) {
 					
-					bAn=new BanAn();
+					bn=new BanAn();
 					bill=new Bill();
 					customer=new Customer();
 					ship=new Ship();
-					tabMain.addTab("Bàn ăn", bAn);
+					tabMain.addTab("Bàn ăn", bn);
 					tabMain.addTab("Bill", bill);
 					tabMain.addTab("Khách hàng", customer);
 					tabMain.addTab("Vận Đơn", ship);
 					
 				}
-				tabMain.setSelectedComponent(bAn);
+				tabMain.setSelectedComponent(bn);
 				tabMain.setSelectedComponent(bill);
 				tabMain.setSelectedComponent(customer);
 				tabMain.setSelectedComponent(ship);
-				
+			}
+		});
+
+
+		Btndathang.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(bn==null) {
+					bn = new BanAn();
+					tabMain.addTab("Ban an",bn);
+				}
+				if(bill == null){
+					bill=new Bill();
+					tabMain.addTab("Đơn đặt hàng", bill);
+				}
+				if(customer==null){
+					customer=new Customer();
+					tabMain.addTab("Khách hàng", customer);
+				}
+				if(ship==null){
+					ship=new Ship();
+					tabMain.addTab("Giao hàng", ship);
+				}
+				tabMain.setSelectedComponent(bn);
+					
+
 			}
 		});
 		Btndathang.setBackground(Color.LIGHT_GRAY);
@@ -206,5 +238,7 @@ public class GDadmin extends JFrame {
 		Btnthietlap.setBounds(0, 273, 220, 50);
 		PanelLeft.add(Btnthietlap);
 
-	}
+			}
 }
+			
+		
