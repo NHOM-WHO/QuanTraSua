@@ -1,3 +1,9 @@
+/**
+ * @Author: Le Vu Huy
+ * @Date:   2021-12-21 22:33:09
+ * @Last Modified by:   Le Vu Huy
+ * @Last Modified time: 2021-12-22 10:54:58
+ */
 package Views;
 
 import java.awt.BorderLayout;
@@ -36,6 +42,7 @@ public class GDadmin extends JFrame {
 	private Customer customer;
 	private Ship ship;
 	private BanAn bn;
+
 
 	/**
 	 * Launch the application.
@@ -158,6 +165,7 @@ public class GDadmin extends JFrame {
 		PanelLeft.add(Btnhanghoa);
 
 		JButton Btndathang = new JButton("Quản lý đặt hàng");
+
 		Btndathang.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(bn==null) {
