@@ -14,8 +14,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-
-
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import java.awt.event.ActionListener;
@@ -62,7 +60,7 @@ public class Danhmuc extends JPanel {
 
 			e1.printStackTrace();
 		}
-		String sql = "select * from Food_Category where(1=1) order by id desc";
+		String sql = "select * from ProductType where(1=1) order by id desc";
 		try {
 
 			st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -75,9 +73,9 @@ public class Danhmuc extends JPanel {
 			while (rs.previous()) {
 				vtRow = new Vector();
 
-				vtRow.add(rs.getString("ID"));
-				vtRow.add(rs.getString("NAME"));
-				vtRow.add(rs.getString("SLUG"));
+				vtRow.add(rs.getString("id"));
+				vtRow.add(rs.getString("ten"));
+				vtRow.add(rs.getString("slug"));
 
 				vtData.add(vtRow);
 			}
@@ -95,53 +93,6 @@ public class Danhmuc extends JPanel {
 				System.out.println(e3);
 			}
 		}
-	}
-
-	public void refresh() {
-		Vector vtRow = null;
-		vtCol = new Vector();
-		vtData = new Vector();
-
-		try {
-			conn = connect.getConnection();
-		} catch (SQLException e1) {
-
-			e1.printStackTrace();
-		}
-		String sql = "select * from Food_Category where(1=1) order by id desc";
-		try {
-
-			st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			rs = st.executeQuery(sql);
-			rsmd = rs.getMetaData();
-			for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-				vtCol.add(rsmd.getColumnName(i));
-			}
-			rs.afterLast();
-			while (rs.previous()) {
-				vtRow = new Vector();
-
-				vtRow.add(rs.getString("ID"));
-				vtRow.add(rs.getString("NAME"));
-				vtRow.add(rs.getString("SLUG"));
-
-				vtData.add(vtRow);
-			}
-			table.setModel(new DefaultTableModel(vtData, vtCol) {
-
-			});
-		} catch (SQLException ex) {
-			System.err.printf(null, ex);
-		} finally {
-			try {
-				conn.close();
-				st.close();
-				rs.close();
-			} catch (Exception e3) {
-				System.out.println(e3);
-			}
-		}
-
 	}
 
 	public Danhmuc() {
@@ -160,24 +111,18 @@ public class Danhmuc extends JPanel {
 			Txtsearch.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
-					DefaultTableModel d1 = (DefaultTableModel) table.getModel();
-					String search = jTextField.getText().toLowerCase();
-					TableRowSorter<DefaultTableModel> tRowSorter = new TableRowSorter<DefaultTableModel>(d1);
+					DefaultTableModel model = (DefaultTableModel) table.getModel();
+					TableRowSorter<DefaultTableModel> tRowSorter = new TableRowSorter<DefaultTableModel>(model);
 					table.setRowSorter(tRowSorter);
-					tRowSorter.setRowFilter(RowFilter.regexFilter(search));
+					tRowSorter.setRowFilter(RowFilter.regexFilter(Txtsearch.getText().trim()));
 				}
 			});
 
 			Txtsearch.setForeground(new Color(169, 169, 169));
 			Txtsearch.setFont(new Font("Tahoma", Font.PLAIN, 12));
-			Txtsearch.setText("search danh muc");
 			Txtsearch.setBounds(366, 6, 176, 19);
 			panel.add(Txtsearch);
 			Txtsearch.setColumns(10);
-
-			JComboBox comboBox = new JComboBox();
-			comboBox.setBounds(604, 5, 141, 21);
-			panel.add(comboBox);
 
 			JPanel panel_1 = new JPanel();
 			panel_1.setBackground(new Color(32, 178, 170));
@@ -192,7 +137,7 @@ public class Danhmuc extends JPanel {
 					try {
 
 						connection = connect.getConnection();
-						String query = "INSERT INTO Food_Category VALUES(?,?)";
+						String query = "INSERT INTO ProductType VALUES(?,?)";
 						PreparedStatement ps = connection.prepareStatement(query);
 
 						ps.setString(1, txtName.getText());
@@ -200,7 +145,7 @@ public class Danhmuc extends JPanel {
 
 						ps.execute();
 						JOptionPane.showMessageDialog(null, "saved");
-						refresh();
+						load();
 					} catch (Exception e2) {
 						System.out.printf(null, e);
 					}
@@ -225,7 +170,7 @@ public class Danhmuc extends JPanel {
 						int select = table.getSelectedRow();
 						String ID = d1.getValueAt(select, 0).toString();
 						connection = connect.getConnection();
-						String query = "UPDATE  Food_Category SET name=?,slug=? WHERE id=?";
+						String query = "UPDATE  ProductType SET ten=?,slug=? WHERE id=?";
 
 						PreparedStatement ps = connection.prepareStatement(query);
 
@@ -244,7 +189,7 @@ public class Danhmuc extends JPanel {
 					}
 					DefaultTableModel model = (DefaultTableModel) table.getModel();
 					model.getDataVector();
-					refresh();
+					load();
 				}
 			});
 			Btnsua.setBounds(117, 405, 85, 21);
@@ -262,7 +207,7 @@ public class Danhmuc extends JPanel {
 					try {
 
 						conn = connect.getConnection();
-						pst = conn.prepareStatement("Delete From Food_Category where id= ?");
+						pst = conn.prepareStatement("Delete From ProductType where id= ?");
 						TableModel model = table.getModel();
 						String id = model.getValueAt(ix, 0).toString();
 						pst.setString(1, id);
@@ -273,7 +218,7 @@ public class Danhmuc extends JPanel {
 					} catch (Exception e2) {
 						JOptionPane.showMessageDialog(null, "Hãy chon ID!");
 					}
-					refresh();
+					load();
 				}
 			});
 			Btnxoa.setBounds(10, 405, 85, 21);
@@ -292,7 +237,7 @@ public class Danhmuc extends JPanel {
 
 						e1.printStackTrace();
 					}
-					String sql = "select * from Food_Category where(1=1) order by id desc";
+					String sql = "select * from ProductType where(1=1) order by id desc";
 					try {
 
 						st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -305,9 +250,9 @@ public class Danhmuc extends JPanel {
 						while (rs.previous()) {
 							vtRow = new Vector();
 
-							vtRow.add(rs.getString("ID"));
-							vtRow.add(rs.getString("NAME"));
-							vtRow.add(rs.getString("SLUG"));
+							vtRow.add(rs.getString("id"));
+							vtRow.add(rs.getString("ten"));
+							vtRow.add(rs.getString("slug"));
 
 							vtData.add(vtRow);
 						}

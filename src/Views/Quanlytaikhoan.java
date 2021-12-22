@@ -1,5 +1,5 @@
 package Views;
-
+import Startup.Startup;
 import javax.swing.JPanel;
 
 import javax.swing.JScrollBar;
@@ -13,16 +13,19 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
+import javax.swing.RowFilter;
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane.CloseAction;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import org.w3c.dom.html.HTMLTableCaptionElement;
 
 import Models.Employees;
 
 import java.awt.Font;
+import java.awt.Image;
 
 import javax.management.modelmbean.ModelMBean;
 import javax.swing.DefaultComboBoxModel;
@@ -56,6 +59,10 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.JLabel;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import javax.swing.ImageIcon;
+
 
 public class Quanlytaikhoan extends JPanel {
 
@@ -73,6 +80,7 @@ public class Quanlytaikhoan extends JPanel {
 	private JTextField txtName;
 	private JTextField txtPhone;
 	private JTextField txtSalary;
+	private JTextField TxtSearch;
 
 	public void load() {
 		Vector vtRow = null;
@@ -191,6 +199,22 @@ public class Quanlytaikhoan extends JPanel {
 		panel.setBounds(0, 0, 755, 59);
 		add(panel);
 		panel.setLayout(null);
+		
+		TxtSearch = new JTextField();
+		TxtSearch.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				DefaultTableModel model= (DefaultTableModel) table.getModel();
+				TableRowSorter<DefaultTableModel> tRowSorter =new TableRowSorter<DefaultTableModel>(model);
+				table.setRowSorter(tRowSorter);
+				tRowSorter.setRowFilter(RowFilter.regexFilter(TxtSearch.getText().trim()));
+			}
+		});
+		TxtSearch.setBounds(452, 10, 176, 19);
+		panel.add(TxtSearch);
+		TxtSearch.setColumns(10);
+		
+		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(new Color(32, 178, 170));
 		panel_1.setBounds(553, 57, 202, 458);

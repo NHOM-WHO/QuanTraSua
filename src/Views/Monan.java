@@ -43,7 +43,7 @@ import java.awt.*;
 import javax.swing.border.MatteBorder;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
+import javax.swing.DefaultComboBoxModel;
 
 public class Monan extends JPanel {
 	private File file;
@@ -57,24 +57,8 @@ public class Monan extends JPanel {
 	Vector vtData = null;
 	private JTable table;
 	private JTextField txtName;
-	private JTextField txtDescription;
 	private JTextField txtUntilname;
 	private JTextField txtPrice;
-	private JTextField txtIdcate;
-
-	private byte[] ConvertFile(String filename) {
-		FileInputStream fileInputStream = null;
-		File file = new File(filename);
-		byte[] bFile = new byte[(int) file.length()];
-		try {
-			fileInputStream = new FileInputStream(file);
-			fileInputStream.read(bFile);
-			fileInputStream.close();
-		} catch (Exception e) {
-			bFile = null;
-		}
-		return bFile;
-	}
 
 	/**
 	 * Create the panel.
@@ -90,7 +74,7 @@ public class Monan extends JPanel {
 
 			e1.printStackTrace();
 		}
-		String sql = "select * from Food_Item where(1=1) order by id desc";
+		String sql = "select * from Product where(1=1) order by id desc";
 		try {
 
 			st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -106,12 +90,12 @@ public class Monan extends JPanel {
 				vtRow = new Vector();
 
 				vtRow.add(rs.getInt("id"));
-				vtRow.add(rs.getString("name"));
-				vtRow.add(rs.getString("description"));
-				vtRow.add(rs.getString("unitName"));
-				vtRow.add(rs.getString("unitPrice"));
-				vtRow.add(rs.getInt("idCategory"));
-				vtRow.add(rs.getBytes("urlImage"));
+				vtRow.add(rs.getString("ten"));
+				vtRow.add(rs.getString("loai_sp"));
+				vtRow.add(rs.getString("gia"));
+				vtRow.add(rs.getString("don_vi"));
+				vtRow.add(rs.getString("hinh_anh"));
+
 				vtData.add(vtRow);
 			}
 
@@ -146,29 +130,28 @@ public class Monan extends JPanel {
 		Txtsearch.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				DefaultTableModel model= (DefaultTableModel) table.getModel();
-				TableRowSorter<DefaultTableModel> tRowSorter =new TableRowSorter<DefaultTableModel>(model);
+				DefaultTableModel model = (DefaultTableModel) table.getModel();
+				TableRowSorter<DefaultTableModel> tRowSorter = new TableRowSorter<DefaultTableModel>(model);
 				table.setRowSorter(tRowSorter);
 				tRowSorter.setRowFilter(RowFilter.regexFilter(Txtsearch.getText().trim()));
 			}
 		});
 		Txtsearch.setForeground(new Color(169, 169, 169));
 		Txtsearch.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		
+
 		Txtsearch.setBounds(366, 6, 176, 19);
 		panel.add(Txtsearch);
 		Txtsearch.setColumns(10);
-
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(604, 5, 141, 21);
-		panel.add(comboBox);
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(new Color(32, 178, 170));
 		panel_1.setBounds(553, 57, 202, 458);
 		add(panel_1);
 		panel_1.setLayout(null);
-
+		JComboBox comboBox = new JComboBox();
+		comboBox.setModel(new DefaultComboBoxModel(new String[] { "1", "2", "3", "4" }));
+		comboBox.setBounds(76, 68, 96, 19);
+		panel_1.add(comboBox);
 		JButton Btnthem = new JButton("Thêm");
 		Btnthem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -176,20 +159,20 @@ public class Monan extends JPanel {
 				try {
 
 					connection = connect.getConnection();
-//					String query = "INSERT INTO Food_Item SELECT  N'"+txtName.getText()+"',N'"+txtDescription.getText()+"',  N'"+txtUntilname.getText()+"',N'"+txtPrice.getText()+"',N'"+txtIdcate.getText()+"',BulkColumn FROM OPENROWSET(BULK N'"+anh+"', SINGLE_BLOB)  urlImage";
-					String query = "INSERT INTO Food_Item VALUES(?,?,?,?,?,?)";
+					String query = "INSERT INTO Product VALUES(?,?,?,?,?)";
 					PreparedStatement ps = connection.prepareStatement(query);
 					ps.setString(1, txtName.getText());
-					ps.setString(2, txtDescription.getText());
+					String perString;
+					perString = comboBox.getSelectedItem().toString();
+					ps.setString(2, perString);
 					ps.setString(3, txtUntilname.getText());
 					ps.setString(4, txtPrice.getText());
-					ps.setString(5, txtIdcate.getText());
-					ps.setBytes(6, ConvertFile(file.getAbsolutePath()));
+					ps.setString(5, file.getAbsolutePath());
 //					 
 					ps.executeUpdate();
 					load();
 					JOptionPane.showMessageDialog(null, "saved");
-					
+
 				} catch (Exception e2) {
 					e2.printStackTrace();
 				}
@@ -216,30 +199,31 @@ public class Monan extends JPanel {
 					String ID = d1.getValueAt(select, 0).toString();
 
 					connection = connect.getConnection();
-					String query = "UPDATE  Food_Item SET name=?,description=?,unitName=?,unitPrice=?,idCategory=?,urlImage=? WHERE id=?";
+					String query = "UPDATE  Product SET ten=?,loai_sp=?,gia=?,don_vi=?,hinh_anh=? WHERE id=?";
 
 					PreparedStatement ps = connection.prepareStatement(query);
 
 					ps.setString(1, txtName.getText());
-					ps.setString(2, txtDescription.getText());
+					String perString;
+					perString = comboBox.getSelectedItem().toString();
+					ps.setString(2, perString);
 					ps.setString(3, txtUntilname.getText());
 					ps.setString(4, txtPrice.getText());
-					ps.setString(5, txtIdcate.getText());
-					ps.setBytes(6, ConvertFile(file.getAbsolutePath()));
-					ps.setString(7, ID);
+					ps.setString(5, file.getAbsolutePath());
+					ps.setString(6, ID);
 
 					int k = ps.executeUpdate();
 
 					JOptionPane.showMessageDialog(null, "Đã sửa thành công!");
 
 				} catch (Exception e2) {
-					JOptionPane.showMessageDialog(null,"Hãy chọn ảnh!");
+					JOptionPane.showMessageDialog(null, "Hãy chọn ảnh!");
 
 				}
 				DefaultTableModel model = (DefaultTableModel) table.getModel();
 				model.getDataVector();
 				load();
-			
+
 			}
 		});
 		Btnsua.setBounds(107, 427, 85, 21);
@@ -257,7 +241,7 @@ public class Monan extends JPanel {
 				try {
 
 					conn = connect.getConnection();
-					pst = conn.prepareStatement("Delete From Food_Item where id= ?");
+					pst = conn.prepareStatement("Delete From Product where id= ?");
 					TableModel model = table.getModel();
 					String ID = model.getValueAt(i, 0).toString();
 					pst.setString(1, ID);
@@ -282,11 +266,6 @@ public class Monan extends JPanel {
 		panel_1.add(txtName);
 		txtName.setColumns(10);
 
-		txtDescription = new JTextField();
-		txtDescription.setColumns(10);
-		txtDescription.setBounds(76, 69, 96, 19);
-		panel_1.add(txtDescription);
-
 		txtUntilname = new JTextField();
 		txtUntilname.setColumns(10);
 		txtUntilname.setBounds(76, 99, 96, 19);
@@ -297,30 +276,21 @@ public class Monan extends JPanel {
 		txtPrice.setBounds(76, 128, 96, 19);
 		panel_1.add(txtPrice);
 
-		txtIdcate = new JTextField();
-		txtIdcate.setColumns(10);
-		txtIdcate.setBounds(76, 155, 96, 19);
-		panel_1.add(txtIdcate);
-
 		JLabel lblNewLabel = new JLabel("Name");
 		lblNewLabel.setBounds(10, 43, 45, 13);
 		panel_1.add(lblNewLabel);
 
-		JLabel lblNewLabel_1 = new JLabel("Description");
+		JLabel lblNewLabel_1 = new JLabel("Type");
 		lblNewLabel_1.setBounds(10, 72, 45, 13);
 		panel_1.add(lblNewLabel_1);
 
-		JLabel lblNewLabel_2 = new JLabel("UnitName");
+		JLabel lblNewLabel_2 = new JLabel("Price");
 		lblNewLabel_2.setBounds(10, 102, 45, 13);
 		panel_1.add(lblNewLabel_2);
 
-		JLabel lblNewLabel_3 = new JLabel("Unitprice");
+		JLabel lblNewLabel_3 = new JLabel("Đơn vị");
 		lblNewLabel_3.setBounds(10, 131, 45, 13);
 		panel_1.add(lblNewLabel_3);
-
-		JLabel lblNewLabel_4 = new JLabel("Idcate");
-		lblNewLabel_4.setBounds(10, 158, 45, 13);
-		panel_1.add(lblNewLabel_4);
 
 		JLabel lblNewLabel_2_1 = new JLabel("");
 		lblNewLabel_2_1.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
@@ -361,7 +331,7 @@ public class Monan extends JPanel {
 
 					e1.printStackTrace();
 				}
-				String sql = "select * from Food_Item where(1=1) order by id desc";
+				String sql = "select * from Product where(1=1) order by id desc";
 				try {
 
 					st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -377,12 +347,11 @@ public class Monan extends JPanel {
 						vtRow = new Vector();
 
 						vtRow.add(rs.getInt("id"));
-						vtRow.add(rs.getString("name"));
-						vtRow.add(rs.getString("description"));
-						vtRow.add(rs.getString("unitName"));
-						vtRow.add(rs.getString("unitPrice"));
-						vtRow.add(rs.getInt("idCategory"));
-						vtRow.add(rs.getBytes("urlImage"));
+						vtRow.add(rs.getString("ten"));
+						vtRow.add(rs.getString("loai_sp"));
+						vtRow.add(rs.getString("gia"));
+						vtRow.add(rs.getString("don_vi"));
+						vtRow.add(rs.getString("hinh_anh"));
 
 						vtData.add(vtRow);
 					}
@@ -410,6 +379,8 @@ public class Monan extends JPanel {
 		btnChoose.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnChoose.setBounds(50, 365, 95, 21);
 		panel_1.add(btnChoose);
+
+		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 58, 541, 457);
 		add(scrollPane);
@@ -422,12 +393,25 @@ public class Monan extends JPanel {
 				int select = table.getSelectedRow();
 				String ID = d1.getValueAt(select, 0).toString();
 				txtName.setText(d1.getValueAt(select, 1).toString());
-				txtDescription.setText(d1.getValueAt(select, 2).toString());
+				String perS = d1.getValueAt(select, 2).toString();
+				switch (perS) {
+				case "1":
+					comboBox.setSelectedIndex(0);
+					break;
+				case "2":
+					comboBox.setSelectedIndex(1);
+					break;
+				case "3":
+					comboBox.setSelectedIndex(2);
+					break;
+				case "4":
+					comboBox.setSelectedIndex(3);
+					break;
+				}
 				txtUntilname.setText(d1.getValueAt(select, 3).toString());
 				txtPrice.setText(d1.getValueAt(select, 4).toString());
-				txtIdcate.setText(d1.getValueAt(select, 5).toString());
 
-				byte[] img = (byte[]) d1.getValueAt(select, 6);
+				String img = (String) d1.getValueAt(select, 5);
 				ImageIcon imageIcon = new ImageIcon(new ImageIcon(img).getImage().getScaledInstance(
 						lblNewLabel_2_1.getWidth(), lblNewLabel_2_1.getHeight(), Image.SCALE_SMOOTH));
 				lblNewLabel_2_1.setIcon(imageIcon);
@@ -441,5 +425,4 @@ public class Monan extends JPanel {
 		load();
 
 	}
-
 }

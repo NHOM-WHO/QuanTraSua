@@ -13,7 +13,7 @@ public class connect {
 		Connection connection = null;
 		try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-			String connectionURL = "jdbc:sqlserver://DESKTOP-RLD2Q4E\\CAOTHAI:1433;databaseName=QuanTraSua;integratedSecurity=true";
+			String connectionURL = "jdbc:sqlserver://DESKTOP-RLD2Q4E\\CAOTHAI:1433;databaseName=QuanTS;integratedSecurity=true";
 			connection = DriverManager.getConnection(connectionURL);
 
 		} catch (ClassNotFoundException e) {

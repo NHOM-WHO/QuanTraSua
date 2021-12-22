@@ -32,7 +32,10 @@ public class GDadmin extends JFrame {
 	private Quanlytaikhoan qltk;
 	private JPanel contentPane;
 	private thongke tkThongke;
-
+	private BanAn bAn;
+	private Bill bill;
+	private Customer customer;
+	private Ship ship;
 	/**
 	 * Launch the application.
 	 */
@@ -141,7 +144,7 @@ public class GDadmin extends JFrame {
 					mn = new Monan();
 					tabMain.addTab("Danh mục", dm);
 					tabMain.addTab("Món ăn", mn);
-
+					
 				}
 				tabMain.setSelectedComponent(dm);
 				tabMain.setSelectedComponent(mn);
@@ -154,6 +157,27 @@ public class GDadmin extends JFrame {
 		PanelLeft.add(Btnhanghoa);
 
 		JButton Btndathang = new JButton("Quản lý đặt hàng");
+		Btndathang.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (bAn == null && bill == null&&customer==null&&ship==null) {
+					
+					bAn=new BanAn();
+					bill=new Bill();
+					customer=new Customer();
+					ship=new Ship();
+					tabMain.addTab("Bàn ăn", bAn);
+					tabMain.addTab("Bill", bill);
+					tabMain.addTab("Khách hàng", customer);
+					tabMain.addTab("Vận Đơn", ship);
+					
+				}
+				tabMain.setSelectedComponent(bAn);
+				tabMain.setSelectedComponent(bill);
+				tabMain.setSelectedComponent(customer);
+				tabMain.setSelectedComponent(ship);
+				
+			}
+		});
 		Btndathang.setBackground(Color.LIGHT_GRAY);
 		Btndathang.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		Btndathang.setBounds(0, 168, 220, 50);
