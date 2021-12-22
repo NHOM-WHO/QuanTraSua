@@ -112,16 +112,21 @@ public class Ship extends JPanel implements ActionListener {
         panel.setLayout(null);
 
         JTextField Txtsearch = new JTextField();
+        Txtsearch.addKeyListener(new KeyAdapter() {
+        	@Override
+        	public void keyReleased(KeyEvent e) {
+        		DefaultTableModel model= (DefaultTableModel) table.getModel();
+				TableRowSorter<DefaultTableModel> tRowSorter =new TableRowSorter<DefaultTableModel>(model);
+				table.setRowSorter(tRowSorter);
+				tRowSorter.setRowFilter(RowFilter.regexFilter(Txtsearch.getText().trim()));
+        	}
+        });
         Txtsearch.setForeground(new Color(169, 169, 169));
         Txtsearch.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        Txtsearch.setText("search mon an");
+       
         Txtsearch.setBounds(366, 6, 176, 19);
         panel.add(Txtsearch);
         Txtsearch.setColumns(10);
-
-        JComboBox comboBox = new JComboBox();
-        comboBox.setBounds(604, 5, 141, 21);
-        panel.add(comboBox);
 
         JPanel panel_1 = new JPanel();
         panel_1.setBackground(new Color(32, 178, 170));
@@ -156,11 +161,14 @@ public class Ship extends JPanel implements ActionListener {
         try {
 
             tb = buildTableModel();
+            
+            JScrollPane scrollPane = new JScrollPane();
+            scrollPane.setBounds(10, 57, 545, 460);
+            add(scrollPane);
 
             table = new JTable(tb);
-            table.setBounds(10, 57, 545, 460);
+            scrollPane.setViewportView(table);
             table.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-            add(table);
 
         } catch (Exception ex) {
             ex.printStackTrace();
