@@ -1,0 +1,12 @@
+
+#THANK YOU FOR DOWNLOADING
+
+Ứng dụng Java Swing CRUD: Quản lý người dùng 
+
+4 chức năng: Tạo, thêm, sửa, xóa
+
+Các bước cài đặt:
+Tạo 1 database có tên 'user' và import SQL file vào
+Nếu không có Database, project không thể chạy
+
+Cảm ơn đã xem!
