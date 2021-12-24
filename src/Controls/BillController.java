@@ -213,6 +213,7 @@ public class BillController {
 
         Connection connection = null;
         try {
+            BillDetailController.delete(id);
             connection = Startup.getConnection();
             String query = "delete from Bill where id=?" ;
         
@@ -226,7 +227,52 @@ public class BillController {
             e.printStackTrace();
             return false;            
         }
+    }
 
+    public static ArrayList<BillModel> getByBanAn(int banAn) {
 
+        ArrayList<BillModel> list=new ArrayList<BillModel>();
+
+        Connection conn= Startup.getConnection();
+     
+        try {
+            String query="SELECT * FROM Bill where ban_an=?";
+            PreparedStatement st = conn.prepareStatement(query);
+
+            st.setInt(1, banAn);
+
+            ResultSet rs=st.executeQuery();
+            
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String nguoi_lap = rs.getString("nguoi_lap");
+                String ban_an=BanAnController.getByPk(rs.getInt("ban_an")).getName();
+                String loai=rs.getString("loai");
+                String status=rs.getString("trang_thai");
+                String ngaylap_bill=rs.getString("ngaylap_bill");
+                String ngaythanh_toan=rs.getString("ngaythanh_toan");
+                int tong_cong=rs.getInt("tong_cong");
+                int thanh_toan=rs.getInt("da_thanhtoan");
+                int giam_gia=rs.getInt("giam_gia");
+                
+                BillModel bill = new BillModel(
+                    id, 
+                    nguoi_lap, 
+                    ban_an,loai,
+                    status,
+                    ngaylap_bill,
+                    ngaythanh_toan,
+                    tong_cong,
+                    thanh_toan,
+                    giam_gia);
+                list.add(bill);
+            }
+
+            return list;
+        } catch (Exception e) {
+            //TODO: handle exception
+            e.printStackTrace();
+            return null;
+        }
     }
 }

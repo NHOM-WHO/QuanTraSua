@@ -82,6 +82,13 @@ public class BanAnController {
 
 		Connection connection = null;
 		try {
+			ArrayList<BillModel> data=BillController.getByBanAn(id);
+
+			for( BillModel item : data){
+
+				BillController.delete(item.getId());
+			}
+			
 			connection = Startup.getConnection();
 
 			String query = "Delete FROM BanAn WHERE Id=?";
