@@ -15,7 +15,7 @@ public class connect {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 			String connectionURL = "jdbc:sqlserver://DESKTOP-RLD2Q4E\\CAOTHAI:1433;databaseName=QuanTS;integratedSecurity=true";
 			connection = DriverManager.getConnection(connectionURL);
-
+			
 		} catch (ClassNotFoundException e) {
 			System.out.println("Kết nối thất bại !!!");
 			System.err.println(e.getMessage() + "/n" + e.getClass() + "/n" + e.getCause());

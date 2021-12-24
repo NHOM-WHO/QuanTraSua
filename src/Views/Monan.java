@@ -80,10 +80,15 @@ public class Monan extends JPanel {
 			st = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs = st.executeQuery(sql);
 			rsmd = rs.getMetaData();
-			for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-				vtCol.add(rsmd.getColumnName(i));
+			
+				vtCol.add(rsmd.getColumnName(1));
+				vtCol.add(rsmd.getColumnName(2));
+				vtCol.add(rsmd.getColumnName(3));
+				vtCol.add(rsmd.getColumnName(4));
+				vtCol.add(rsmd.getColumnName(5));
+				vtCol.add(rsmd.getColumnName(6));
 
-			}
+			
 
 			rs.afterLast();
 			while (rs.previous()) {
@@ -98,7 +103,13 @@ public class Monan extends JPanel {
 
 				vtData.add(vtRow);
 			}
-
+			TableColumnModel columnModel = table.getColumnModel();
+			columnModel.getColumn(0).setWidth(100);
+			columnModel.getColumn(1).setWidth(100);
+			columnModel.getColumn(2).setWidth(100);
+			columnModel.getColumn(3).setWidth(100);
+			columnModel.getColumn(4).setWidth(100);
+			columnModel.getColumn(5).setWidth(100);
 			table.setModel(new DefaultTableModel(vtData, vtCol) {
 
 			});
@@ -419,9 +430,10 @@ public class Monan extends JPanel {
 		});
 
 		table.setBounds(10, 58, 541, 457);
-
+		
 		scrollPane.setViewportView(table);
 		table.setAutoCreateRowSorter(true);
+		
 		load();
 
 	}

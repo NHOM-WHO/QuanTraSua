@@ -191,7 +191,7 @@ public class GDadmin extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(bn==null) {
 					bn = new BanAn();
-					tabMain.addTab("Ban an",bn);
+					tabMain.addTab("Bàn an",bn);
 				}
 				if(bill == null){
 					bill=new Bill();
