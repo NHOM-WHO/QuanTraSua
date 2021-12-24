@@ -203,4 +203,38 @@ public class BillDetailController {
             return false;
         }
     }
+    
+   public static boolean delete(int id){
+
+        Connection connection = null;
+        try {
+            connection = Startup.getConnection();
+
+            ArrayList<BillDetailModel> data=getByBillId(id);
+
+            for(BillDetailModel item : data){
+
+                String query = "delete from BillDetail_Topping where bill=?" ;
+
+                PreparedStatement ps = connection.prepareStatement(query);
+
+                ps.setInt(1, item.getId());
+
+                ps.executeUpdate();
+            }
+            
+            String query = "delete from BillDetail where bill=?" ;
+        
+            PreparedStatement ps = connection.prepareStatement(query);
+
+            ps.setInt(1, id);
+
+            ps.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;            
+        }
+
+    }
 }

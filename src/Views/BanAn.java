@@ -11,6 +11,7 @@ import java.awt.event.*;
 
 import Viewspopup.Table.*;
 import Controls.BanAnController;
+import Controls.CustomerController;
 
 public class BanAn extends JPanel implements ActionListener {
 
@@ -33,8 +34,16 @@ public class BanAn extends JPanel implements ActionListener {
             ad.setVisible(true);
         }
         else if(e.getActionCommand().equals("Delete")){
-            Delete ad=new Delete();
-            ad.setVisible(true);
+        	  try {
+                  int row = table.getSelectedRow();
+
+                  int id=Integer.parseInt(tb.getValueAt(row, 0).toString());
+                  BanAnController.delete(id);
+                  JOptionPane.showMessageDialog(this, "Thành công");
+              } catch (Exception ex) {
+                  ex.printStackTrace();
+                  JOptionPane.showMessageDialog(this, "Hãy chọn một hàng");
+              }
         }
         else if(e.getActionCommand().equals("Load")){
      
