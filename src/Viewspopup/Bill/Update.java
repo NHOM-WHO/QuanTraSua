@@ -590,13 +590,9 @@ public class Update extends JFrame implements ActionListener, MouseListener,Chan
 
         Border border = BorderFactory.createTitledBorder("Thao tác");
         panel1.setBorder(border);
-
-        JButton button1 = new JButton("Quản Lý Ship");
         JButton button2 = new JButton("Thanh toán");
         JButton button3 = new JButton("Cập nhật");
         JButton button4 = new JButton("Đóng");
-        JButton button5 = new JButton("In hóa đơn");
-        JButton button6 = new JButton("Hủy hóa đơn");
 
         button3.setActionCommand("update");
         button3.addActionListener(this);
@@ -606,13 +602,9 @@ public class Update extends JFrame implements ActionListener, MouseListener,Chan
 
         button4.setActionCommand("close");
         button4.addActionListener(this);
-
-        panel1.add(button1);
         panel1.add(button2);
         panel1.add(button3);
         panel1.add(button4);
-        panel1.add(button5);
-        panel1.add(button6);
 
         return panel1;
 

@@ -191,7 +191,7 @@ public class GDadmin extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(bn==null) {
 					bn = new BanAn();
-					tabMain.addTab("Bàn an",bn);
+					tabMain.addTab("Bàn ăn",bn);
 				}
 				if(bill == null){
 					bill=new Bill();
@@ -231,12 +231,6 @@ public class GDadmin extends JFrame {
 		Btnthongkee.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		Btnthongkee.setBounds(0, 220, 220, 50);
 		PanelLeft.add(Btnthongkee);
-
-		JButton Btnthietlap = new JButton("Thiết lập");
-		Btnthietlap.setBackground(Color.LIGHT_GRAY);
-		Btnthietlap.setFont(new Font("Segoe UI", Font.BOLD, 14));
-		Btnthietlap.setBounds(0, 273, 220, 50);
-		PanelLeft.add(Btnthietlap);
 
 			}
 }

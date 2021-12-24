@@ -52,24 +52,24 @@ public class thongke extends JPanel {
 
 		JLabel lblNewLabel = new JLabel("Thống Kê Doanh Thu");
 		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD, 20));
-		lblNewLabel.setBounds(332, 10, 186, 39);
+		lblNewLabel.setBounds(76, 10, 186, 39);
 		panel.add(lblNewLabel);
+		
+				Label lbTong_1 = new Label("Tổng Doanh Thu: ");
+				lbTong_1.setBounds(340, 10, 289, 39);
+				panel.add(lbTong_1);
+				lbTong_1.setFont(new Font("Tahoma", Font.BOLD, 20));
 
 		JButton Btnsua = new JButton("Thống Kê");
-		Btnsua.setBounds(30, 69, 85, 21);
+		Btnsua.setBounds(582, 203, 112, 21);
 		add(Btnsua);
 
 		JButton Btnload = new JButton("Thoát");
-		Btnload.setBounds(30, 100, 85, 21);
+		Btnload.setBounds(582, 257, 112, 21);
 		add(Btnload);
 
-		Label lbTong = new Label("Tông Doanh Thu: ");
-		lbTong.setFont(new Font("Tahoma", Font.BOLD, 20));
-		lbTong.setBounds(366, 65, 511, 56);
-		add(lbTong);
-
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(30, 155, 468, 303);
+		scrollPane.setBounds(10, 58, 541, 457);
 		add(scrollPane);
 
 		table_2 = new JTable();
@@ -84,7 +84,7 @@ public class thongke extends JPanel {
 				int Tong = 0;
 				for(int i = 0; i<table_2.getRowCount();i++) {
 					Tong = Tong + Integer.parseInt(table_2.getValueAt(i,2).toString());
-					lbTong.setText("Tông Doanh Thu: "+" "+ x.format(Tong)+" "+"VND");
+					lbTong_1.setText("Tông Doanh Thu: "+" "+ x.format(Tong)+" "+"VND");
 				}
 			}
 		});
