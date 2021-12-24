@@ -103,13 +103,7 @@ public class Monan extends JPanel {
 
 				vtData.add(vtRow);
 			}
-			TableColumnModel columnModel = table.getColumnModel();
-			columnModel.getColumn(0).setWidth(100);
-			columnModel.getColumn(1).setWidth(100);
-			columnModel.getColumn(2).setWidth(100);
-			columnModel.getColumn(3).setWidth(100);
-			columnModel.getColumn(4).setWidth(100);
-			columnModel.getColumn(5).setWidth(100);
+			
 			table.setModel(new DefaultTableModel(vtData, vtCol) {
 
 			});
