@@ -5,7 +5,7 @@ import java.sql.*;
 import java.util.*;
 import Models.BanAn;
 import Startup.Startup;
-
+import Models.*;
 public class BanAnController {
 	public static ArrayList<BanAn> getAll() {
 		ArrayList<BanAn> list = new ArrayList<BanAn>();

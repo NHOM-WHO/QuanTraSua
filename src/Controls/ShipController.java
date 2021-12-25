@@ -1,4 +1,3 @@
-
 package Controls;
 
 import java.sql.*;
@@ -80,6 +79,26 @@ public class ShipController {
         try {
             conn=Startup.getConnection();
             String query="delete from Ship where id=?";
+            PreparedStatement ps=conn.prepareStatement(query);
+
+            ps.setInt(1, id);
+
+            ps.executeUpdate();
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean deleteByBill(int id){
+
+        Connection conn=null;
+
+        try {
+            conn=Startup.getConnection();
+            String query="delete from Ship where bill=?";
             PreparedStatement ps=conn.prepareStatement(query);
 
             ps.setInt(1, id);

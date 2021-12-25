@@ -1,4 +1,3 @@
-
 package Controls;
 
 import java.sql.*;
@@ -213,6 +212,7 @@ public class BillController {
 
         Connection connection = null;
         try {
+            ShipController.delete(id);
             BillDetailController.delete(id);
             connection = Startup.getConnection();
             String query = "delete from Bill where id=?" ;
